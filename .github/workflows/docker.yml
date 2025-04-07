@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  DOCKER_IMAGE_NAME: lottomate_front
+  DOCKER_IMAGE_NAME: dahndell/lottomate_front
   DOCKER_TAG: latest  # 또는 원하는 태그
 
 jobs:
