@@ -67,7 +67,7 @@ jobs:
             echo "Running new container with --pull always..."
             sudo docker run --pull always -d --name $CONTAINER_NAME -p 3001:80 $IMAGE_NAME
 
-            # 🔍 index.html 내용 일부 확인
+            # index.html 내용 일부 확인
             echo "Checking /usr/share/nginx/html/index.html inside container:"
-            sudo docker exec $CONTAINER_NAME head -n 20 /usr/share/nginx/html/index.html || echo "⚠️ Could not read index.html"
+            sudo docker exec $CONTAINER_NAME head -n 20 /usr/share/nginx/html/index.html || echo "!! Could not read index.html"
 
