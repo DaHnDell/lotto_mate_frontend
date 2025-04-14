@@ -68,4 +68,4 @@ jobs:
           
           # 새 컨테이너 실행 
           echo "Starting a new container: $CONTAINER_NAME"
-          sudo docker run -d --name $CONTAINER_NAME -p 3000:80 $IMAGE_NAME
+          sudo docker run -d --name $CONTAINER_NAME -p 3001:80 $IMAGE_NAME
