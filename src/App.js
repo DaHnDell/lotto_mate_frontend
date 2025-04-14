@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          도커 잘 되고 있을까...
+          도커 잘 되고 있을까 2트
         </a>
       </header>
     </div>
