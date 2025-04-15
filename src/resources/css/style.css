@@ -1,11 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @import './color-scheme.css';
 @import './button.css';
 @import './typography.css';
 
+.noto-sans-kr {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+:root {
+  --font-primary: "Noto Sans KR", sans-serif !important;
+}
+
+body {
+  font-family: var(--font-primary) !important;
+}
+
 .custom-navbar {
   padding: 20px 0;
   transition: all 0.3s ease;
-  background-color: transparent;
+  background-color: var(--bg-blue-tint);
 }
 
 .navbar-scrolled {
@@ -22,22 +39,57 @@
   left: 50%;
   transform: translateX(-50%);
   color: var(--text-white);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .logo-dot {
   color: var(--secondary);
 }
 
+/* 로고 이미지 스타일 */
+.logo-img {
+  height: 50px; /* 기본 로고 높이 */
+  width: auto;
+  transition: height 0.3s ease;
+}
+
+/* 스크롤 시 로고 크기 조정 */
+.navbar-scrolled .logo-img {
+  height: 40px; /* 스크롤 시 작아진 로고 높이 */
+}
+
 /* 메뉴 스타일 */
 .custom-navbar .nav-link {
-  color: var(--text-white) !important;
-  margin: 0 15px;
+  color: var(--neutral-800) !important;
+  margin: 0 30px; /* 좌우 여백 줄임 (원래 15px) */
   position: relative;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
+/* 메뉴 간격 조정 */
+.left-menu, .right-menu {
+  display: flex;
+  align-items: center;
+  width: 40%;
+}
+
+.left-menu {
+  justify-content: flex-end;
+  padding-right: 30px;
+}
+
+.right-menu {
+  justify-content: flex-start;
+  padding-left: 30px;
+}
+
 .custom-navbar .nav-link:hover {
+  text-decoration: none !important;
   color: var(--secondary) !important;
 }
 
@@ -64,6 +116,13 @@
 .custom-navbar .nav-link.active::after {
   width: 100%;
   background-color: var(--primary);
+}
+
+/* 컨테이너 너비 조정 */
+@media (min-width: 992px) {
+  .custom-navbar .container {
+    max-width: 960px;
+  }
 }
 
 /* 모바일 메뉴 스타일 */
@@ -134,5 +193,65 @@
 @media (max-width: 576px) {
   .logo-brand {
     font-size: 22px;
+  }
+}
+
+/* Home 페이지 스타일 */
+
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 80px; /* 헤더 높이에 맞게 조정 */
+}
+
+/* 히어로 섹션 스타일 */
+.hero-section {
+  height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-blue-tint);
+  background-image: linear-gradient(135deg, rgba(63, 89, 246, 0.05) 0%, rgba(86, 165, 228, 0.05) 100%);
+}
+
+.hero-title {
+  color: var(--text-dark);
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+  color: var(--text-medium);
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .main-content {
+    padding-top: 60px; /* 모바일에서는 헤더 높이가 줄어들 수 있으므로 조정 */
   }
 }
