@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../resources/css/style.css';
 import logo from '../../resources/img/logo3.png';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
   
   // 스크롤 감지
   useEffect(() => {
