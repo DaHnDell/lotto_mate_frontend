@@ -1,0 +1,41 @@
+/* 색상 시스템 */
+:root {
+  /* 주 색상 */
+  --primary: #3F59F6;
+  --primary-light: #5670FF;
+  --primary-dark: #2942D9;
+  
+  /* 보조 색상 */
+  --secondary: #56A5E4;
+  --secondary-light: #78BBF7;
+  --secondary-dark: #4089C7;
+  
+  /* 중립 색상 */
+  --neutral-50: #F5F7FF;
+  --neutral-100: #E6EBFF;
+  --neutral-200: #CCD4FF;
+  --neutral-300: #B3BFFF;
+  --neutral-400: #8C9AFF;
+  --neutral-500: #6679FF;
+  --neutral-600: #4D5FD9;
+  --neutral-700: #3A48B3;
+  --neutral-800: #29348C;
+  --neutral-900: #1A2066;
+  
+  /* 배경 색상 */
+  --bg-light: #FFFFFF;
+  --bg-dark: #111827;
+  --bg-blue-tint: #F0F4FF;
+  
+  /* 텍스트 색상 */
+  --text-dark: #111827;
+  --text-medium: #4B5563;
+  --text-light: #9CA3AF;
+  --text-white: #FFFFFF;
+  
+  /* 기능성 색상 */
+  --success: #34D399;
+  --warning: #FBBF24;
+  --error: #F87171;
+  --info: #60A5FA;
+}
