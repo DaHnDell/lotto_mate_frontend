@@ -69,5 +69,4 @@ jobs:
 
             # index.html 내용 일부 확인
             echo "Checking /usr/share/nginx/html/index.html inside container:"
-            sudo docker exec $CONTAINER_NAME head -n 20 /usr/share/nginx/html/index.html || echo "!! Could not read index.html"
-
+            sudo docker exec $CONTAINER_NAME head -n 20 /usr/share/nginx/html/index.html || echo "!! Could not read index.html" 
