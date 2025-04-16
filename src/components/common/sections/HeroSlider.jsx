@@ -7,8 +7,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import background1 from '../../../resources/img/lottomate-background.jpg'
 
-const slide3Image = 'https://via.placeholder.com/1200x500';
-
 const HeroSlider = () => {
   // 최근 당첨 번호
   const latestLotto = {
@@ -161,19 +159,86 @@ const HeroSlider = () => {
             </div>
           </div>
           
-          {/* 슬라이드 3 */}
+          {/* 슬라이드 3 - 로또메이트+ 구독 */}
           <div className="slider-item">
-            <div 
-              className="slider-image" 
-              style={{ backgroundImage: `url(${slide3Image})` }}
-            >
+            <div className="slider-image premium-slide">
               <div className="slider-content">
                 <Container>
-                  <h1>로또메이트+ 구독</h1>
-                  <p className='fw-bold'>프리미엄 기능으로 당첨 확률을 높여보세요</p>
-                  <Button as={Link} to="/premium" variant="primary" size="lg">
-                    프리미엄 혜택 보기
-                  </Button>
+                  <Row className="align-items-center">
+                    <Col lg={5} md={12} className="text-center text-lg-start mb-4 mb-lg-0">
+                      <h1>로또메이트+ 구독</h1>
+                      <p className="fw-bold">매주 자동으로 로또번호를 구매하고 관리하세요</p>
+                      <p className="premium-feature">✓ 주 1회부터 3회까지 맞춤 구독</p>
+                      <p className="premium-feature">✓ AI 기반 번호 추천 서비스</p>
+                      <p className="premium-feature">✓ 당첨 즉시 알림 서비스</p>
+                      <Button as={Link} to="/premium" variant="primary" size="lg" className="mt-3">
+                        구독 시작하기
+                      </Button>
+                    </Col>
+                    <Col lg={7} md={12}>
+                      <div className="subscription-plans">
+                        <Row>
+                          {/* 주 1회 요금제 */}
+                          <Col md={4} className="mb-3 mb-md-0">
+                            <div className="plan-card">
+                              <div className="plan-header">
+                                <h3>BASIC</h3>
+                                <p className="plan-price">₩5,000<span>/월</span></p>
+                              </div>
+                              <div className="plan-body">
+                                <p className="plan-feature">주 1회 자동 구매</p>
+                                <p className="plan-feature">번호 분석 리포트</p>
+                                <p className="plan-feature">당첨 문자 알림</p>
+                              </div>
+                              <Button as={Link} to="/premium/basic" variant="outline-primary" className="w-75">
+                                선택하기
+                              </Button>
+                            </div>
+                          </Col>
+                          
+                          {/* 주 2회 요금제 */}
+                          <Col md={4} className="mb-3 mb-md-0">
+                            <div className="plan-card popular">
+                              <div className="popular-badge">인기</div>
+                              <div className="plan-header">
+                                <h3>STANDARD</h3>
+                                <p className="plan-price">₩9,000<span>/월</span></p>
+                              </div>
+                              <div className="plan-body">
+                                <p className="plan-feature">주 2회 자동 구매</p>
+                                <p className="plan-feature">번호 분석 리포트</p>
+                                <p className="plan-feature">당첨 문자 알림</p>
+                                <p className="plan-feature">무제한 번호 추천</p>
+                              </div>
+                              <Button as={Link} to="/premium/standard" variant="primary" className="w-75">
+                                선택하기
+                              </Button>
+                            </div>
+                          </Col>
+                          
+                          {/* 주 3회 요금제 */}
+                          <Col md={4}>
+                            <div className="plan-card">
+                              <div className="plan-header">
+                                <h3>PREMIUM</h3>
+                                <p className="plan-price">₩12,000<span>/월</span></p>
+                              </div>
+                              <div className="plan-body">
+                                <p className="plan-feature">주 3회 자동 구매</p>
+                                <p className="plan-feature">번호 분석 리포트</p>
+                                <p className="plan-feature">당첨 문자 알림</p>
+                                <p className="plan-feature">무제한 번호 추천</p>
+                                <p className="plan-feature">1:1 당첨 컨설팅</p>
+                              </div>
+                              <Button as={Link} to="/premium/premium" variant="outline-primary" className="w-75">
+                                선택하기
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Col>
+                  </Row>
                 </Container>
               </div>
             </div>

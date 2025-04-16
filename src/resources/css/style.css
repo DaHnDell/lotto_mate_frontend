@@ -650,6 +650,134 @@ html {
   }
 }
 
+/* 프리미엄 슬라이드 스타일 */
+.premium-slide {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  min-height: 550px;
+  display: flex;
+  align-items: center;
+}
+
+.premium-feature {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.subscription-plans {
+  padding: 20px;
+}
+
+.plan-card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  color: #333;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.plan-card.popular {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border: 2px solid #2575fc;
+}
+
+.plan-card.popular:hover {
+  transform: scale(1.07) translateY(-5px);
+}
+
+.popular-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #2575fc;
+  color: white;
+  padding: 5px 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-bottom-left-radius: 8px;
+}
+
+.plan-header {
+  padding: 20px;
+  background-color: #f8f9fa;
+  text-align: center;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.plan-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.plan-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 10px 0 0;
+  color: #2575fc;
+}
+
+.plan-price span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #777;
+}
+
+.plan-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.plan-feature {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 5px;
+  font-size: 0.95rem;
+}
+
+.plan-feature:before {
+  content: "✓";
+  color: #2575fc;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.plan-card .btn {
+  margin: 0 20px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+@media (max-width: 991px) {
+  .slider-content {
+    padding: 60px 0;
+  }
+  
+  .subscription-plans {
+    margin-top: 30px;
+  }
+  
+  .plan-card.popular {
+    transform: scale(1);
+  }
+  
+  .plan-card.popular:hover {
+    transform: translateY(-5px);
+  }
+}
+
 
 /* 최근 당첨 번호 섹션 */
 .latest-lotto-section {
