@@ -449,6 +449,10 @@ html {
   box-sizing: border-box;
 }
 
+.slider-content h1 {
+  color: var(--neutral-900);
+}
+
 /* slick 슬라이더 화살표와 점 위치 조정 */
 .slider-section .slick-dots {
   bottom: 25px;
@@ -506,7 +510,8 @@ html {
 
 /* 차트 컨테이너 스타일 */
 .chart-container {
-  background-color: rgba(255, 255, 255, 0.08);
+  /* background-color: rgba(255, 255, 255, 0.08); */
+  background-color: #eef9ff;
   border-radius: 15px;
   padding: 15px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
@@ -525,7 +530,6 @@ html {
 
 .chart-slide p {
   color: var(--neutral-900);
-  font-size: 1.2rem;
   margin-bottom: 1.5rem;
   /* text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); */
 }
