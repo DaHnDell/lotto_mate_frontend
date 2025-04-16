@@ -3,11 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import HeroSlider from './sections/HeroSlider';
-// import ServicesSection from './sections/ServicesSection';
-// import PremiumSection from './sections/PremiumSection';
+import NumberGeneratorSection from './sections/NumberGeneratorSection';
+import NoticeAndFaqSection from './sections/NoticeAndFaqSection'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../resources/css/style.css';
-import NumberGeneratorSection from './sections/NumberGeneratorSection';
 
 const Home = () => {
   const location = useLocation();
@@ -32,7 +31,7 @@ const Home = () => {
         }, 100);
       }
       
-      // location state 초기화 (히스토리에 남지 않도록)
+      // location state 초기화
       navigate('/', { replace: true });
     } 
     // URL 해시를 확인하여 해당 섹션으로 스크롤
@@ -64,15 +63,15 @@ const Home = () => {
           <HeroSlider />
         </div>
 
-        {/* 번호 뽑기 섹션 - 추가됨 */}
+        {/* 번호 뽑기 섹션 */}
         <div id="number-generator-section">
           <NumberGeneratorSection />
         </div>
 
-        {/*
-        <div id="premium-section">
-          <PremiumSection />
-        </div> */}
+        {/* 공지사항 및 FAQ 섹션 */}
+        <div id="notice-faq-section">
+          <NoticeAndFaqSection />
+        </div>
       </main>
       
       <Footer />
