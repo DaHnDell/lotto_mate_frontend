@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,13 +8,20 @@ import logo from '../../resources/img/logo3.png';
 import { Envelope, Github, Telephone, Apple, Android } from 'react-bootstrap-icons';
 
 const Footer = () => {
-  // 예시 당첨 번호 (실제로는 API에서 가져올 수 있음)
-  const [latestLotto, setLatestLotto] = useState({
+  // // 예시 당첨 번호 (실제로는 API에서 가져올 수 있음)
+  // const [latestLotto, setLatestLotto] = useState({
+  //   round: 1064,
+  //   numbers: [8, 13, 19, 27, 40, 45],
+  //   bonusNumber: 12,
+  //   date: '2025-04-13'
+  // });
+
+  const latestLotto = {
     round: 1064,
     numbers: [8, 13, 19, 27, 40, 45],
     bonusNumber: 12,
     date: '2025-04-13'
-  });
+  };
 
   return (
     <footer className="custom-footer py-5">
