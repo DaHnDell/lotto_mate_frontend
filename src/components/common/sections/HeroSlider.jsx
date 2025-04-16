@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import background1 from '../../../resources/img/lottomate-background.jpg'
 
-// 슬라이더 이미지 (실제 구현 시 이미지 파일 경로로 변경)
-const slide1Image = 'https://via.placeholder.com/1200x500';
 const slide3Image = 'https://via.placeholder.com/1200x500';
 
 const HeroSlider = () => {
@@ -58,6 +57,8 @@ const HeroSlider = () => {
     ]
   };
 
+  const imageOpacity = 0.3;
+
   // 차트를 위한 커스텀 툴팁
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -83,9 +84,11 @@ const HeroSlider = () => {
           <div className="slider-item">
             <div 
               className="slider-image" 
-              style={{ backgroundImage: `url(${slide1Image})` }}
+              style={{ 
+                backgroundImage: `linear-gradient(rgba(255, 255, 255, ${1 - imageOpacity}), rgba(255, 255, 255, ${1 - imageOpacity})), url(${background1})`,
+              }}
             >
-              <div className="slider-content">
+              <div className="slider-image-content">
                 <Container>
                   <h1>이번 주 당첨 번호는?</h1>
                   <p className='fw-bold'>실시간으로 업데이트되는 당첨 정보를 확인하세요</p>
