@@ -11,6 +11,14 @@ const slide1Image = 'https://via.placeholder.com/1200x500';
 const slide3Image = 'https://via.placeholder.com/1200x500';
 
 const HeroSlider = () => {
+  // 최근 당첨 번호
+  const latestLotto = {
+    round: 1064,
+    numbers: [8, 13, 19, 27, 40, 45],
+    bonusNumber: 12,
+    date: '2025-04-13'
+  };
+
   // 당첨률이 높은 번호 데이터 (예시 데이터)
   const highWinRateNumbers = [
     { number: 34, winRate: 78 },
@@ -80,10 +88,20 @@ const HeroSlider = () => {
               <div className="slider-content">
                 <Container>
                   <h1>이번 주 당첨 번호는?</h1>
-                  <p>실시간으로 업데이트되는 당첨 정보를 확인하세요</p>
-                  <Button as={Link} to="/draw-results" variant="primary" size="lg">
-                    당첨 소식 보기
-                  </Button>
+                  <p className='fw-bold'>실시간으로 업데이트되는 당첨 정보를 확인하세요</p>
+                  {latestLotto.numbers.map((num, index) => (
+                    <div 
+                      className={`lotto-ball lotto-ball-${Math.ceil(num / 10)} mt-3`} 
+                      key={index}
+                      style={{width: '50px', height: '50px'}}
+                    >
+                      {num}
+                    </div>
+                  ))}
+                  <span className="lotto-plus">+</span>
+                  <span className="lotto-ball lotto-ball-bonus" style={{width: '50px', height: '50px'}}>
+                    {latestLotto.bonusNumber}
+                  </span>
                 </Container>
               </div>
             </div>
@@ -97,19 +115,19 @@ const HeroSlider = () => {
                   <Row className="align-items-center">
                     <Col lg={5} md={12} className="text-center text-lg-start mb-4 mb-lg-0">
                       <h1>최근 당첨률 높은 번호</h1>
-                      <p>로또메이트 통계 분석 결과, 이 번호들의 당첨 빈도가 높습니다</p>
+                      <p className='fw-bold'>로또메이트 통계 분석 결과, 이 번호들의 당첨 빈도가 높습니다</p>
                       <div className="lotto-balls-container mt-4">
                         {highWinRateNumbers.map((item, index) => (
                           <div 
                             key={index} 
-                            className="lotto-ball d-inline-flex"
-                            style={{ backgroundColor: getNumberColor(item.number) }}
+                            className={`lotto-ball lotto-ball-${Math.ceil(item.number / 10)} d-inline-flex`}
+                            // style={{ backgroundColor: getNumberColor(item.number) }}
                           >
                             {item.number}
                           </div>
                         ))}
                       </div>
-                      <Button as={Link} to="/number-generator" variant="secondary" size="md" className="mt-3">
+                      <Button as={Link} to="/number-generator" variant="primary" size="md" className="mt-4">
                         번호 생성하기
                       </Button>
                     </Col>
