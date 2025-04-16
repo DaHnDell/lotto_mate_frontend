@@ -124,7 +124,7 @@ const Footer = () => {
             <p>&copy; {new Date().getFullYear()} 로또메이트. All rights reserved.</p>
           </Col>
           <Col md={6} className="footer-company-info text-md-end">
-            <p>사업자등록번호: 123-45-67890 | 대표: 이승환</p>
+            <p>낭만 코딩단 | 사업자등록번호: 123-45-67890 | 대표: 이승환</p>
           </Col>
         </Row>
       </Container>
