@@ -99,13 +99,16 @@ const NumberGeneratorSection = () => {
               </div>
               
               <div className="d-flex justify-content-between align-items-center">
-                <Button 
-                  variant="outline-danger" 
-                  onClick={resetUserSelection}
-                  disabled={selectedCount === 0}
-                >
-                  초기화
-                </Button>
+                {selectedCount === 0 ? 
+                  <></> : 
+                  <Button 
+                    variant="outline-danger" 
+                    onClick={resetUserSelection}
+                    size='sm'
+                  >
+                    초기화
+                  </Button>
+                }
                 
                 <div className="selected-numbers-display">
                   {userNumbers.map((selected, index) => 
@@ -121,6 +124,16 @@ const NumberGeneratorSection = () => {
                 </div>
               </div>
               
+              <div className="save-numbers text-center mt-4 pt-3 border-top">
+                <Button variant="outline-primary" size="lg" className="w-100">
+                  이 번호 저장하기
+                </Button>
+                <p className="text-muted mt-2 small">
+                  <i className="bi bi-info-circle me-1"></i>
+                  번호를 저장하려면 로그인이 필요합니다.
+                </p>
+              </div>
+
               {/* 인기 번호 표시 */}
               <div className="popular-numbers mt-4 pt-3 border-top">
                 <p className="popular-numbers-title fw-bold text-primary mb-2">
@@ -163,7 +176,7 @@ const NumberGeneratorSection = () => {
                 <Button 
                   variant="primary" 
                   size="lg" 
-                  className="random-btn px-4"
+                  className="random-btn px-4 mt-4"
                   onClick={generateRandomNumbers}
                 >
                   <Shuffle className="me-2" />
@@ -171,7 +184,7 @@ const NumberGeneratorSection = () => {
                 </Button>
               </div>
               
-              <div className="random-option mt-4">
+              <div className="random-option mt-5 mb-3 pt-4">
                 <Form>
                   <Form.Check 
                     type="checkbox" 
