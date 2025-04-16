@@ -26,9 +26,9 @@ body {
 }
 
 .navbar-scrolled {
-  background-color: var(--bg-dark);
+  background-color: var(--bg-blue-tint);
   box-shadow: 0 2px 10px rgba(63, 89, 246, 0.15);
-  padding: 10px 0;
+  padding: 15px 0;
 }
 
 /* 로고 스타일 */
