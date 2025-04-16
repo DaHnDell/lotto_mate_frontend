@@ -124,15 +124,23 @@ const NumberGeneratorSection = () => {
                 </div>
               </div>
               
-              <div className="save-numbers text-center mt-4 pt-3 border-top">
-                <Button variant="outline-primary" size="lg" className="w-100">
-                  이 번호 저장하기
-                </Button>
-                <p className="text-muted mt-2 small">
+              {selectedCount === 6 ? 
+                <div className="save-numbers text-center mt-4 pt-3 border-top">
+                  <Button variant="outline-primary" size="lg" className="w-100">
+                    이 번호 저장하기
+                  </Button>
+                  <p className="text-muted mt-2 small">
+                    <i className="bi bi-info-circle me-1"></i>
+                    번호를 저장하려면 로그인이 필요합니다.
+                  </p>
+                </div> :
+                <div className="save-numbers text-center mt-4 pt-3 border-top">
+                <p className="text-muted mt-2 fw-bold">
                   <i className="bi bi-info-circle me-1"></i>
-                  번호를 저장하려면 로그인이 필요합니다.
+                  6개 번호를 골라 주세요
                 </p>
               </div>
+              } 
 
               {/* 인기 번호 표시 */}
               <div className="popular-numbers mt-4 pt-3 border-top">
