@@ -940,3 +940,116 @@ html {
     font-size: 1.1rem;
   }
 }
+
+.notice-faq-section {
+  background-color: var(--text-white) !important;
+  padding: 80px 0;
+}
+
+/* 섹션 제목 스타일 */
+.notice-faq-section .section-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.notice-faq-section .section-subtitle {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* 공지사항 카드 스타일 */
+.notice-faq-section .card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--neutral-50);
+}
+
+.notice-faq-section .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.notice-faq-section .card-title {
+  font-size: 1.1rem;
+  line-height: 1.4;
+  min-height: 50px;
+}
+
+.notice-faq-section .card-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+  min-height: 60px;
+}
+
+.notice-faq-section .card-footer {
+  padding-top: 0;
+  background-color: var(--neutral-50) !important;
+}
+
+.notice-faq-section .badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+}
+
+/* 공지사항 섹션 타이틀 */
+.notice-faq-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #343a40;
+}
+
+/* FAQ 아코디언 스타일 */
+.notice-faq-section .accordion-item {
+  border: none;
+  margin-bottom: 10px;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.notice-faq-section .accordion-button {
+  background-color: #f8f9fa;
+  border: none;
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  color: #343a40;
+}
+
+.notice-faq-section .accordion-button:not(.collapsed) {
+  background-color: #e9ecef;
+  color: #0d6efd;
+  box-shadow: none;
+}
+
+.notice-faq-section .accordion-button:focus {
+  box-shadow: none;
+  border-color: rgba(13, 110, 253, 0.25);
+}
+
+.notice-faq-section .accordion-body {
+  padding: 1rem 1.25rem;
+  font-size: 0.95rem;
+  color: #495057;
+  background-color: #fff;
+}
+
+/* 아이콘 스타일 */
+.notice-faq-section .text-primary {
+  color: #0d6efd !important;
+}
+
+/* 모바일 반응형 조정 */
+@media (max-width: 768px) {
+  .notice-faq-section {
+    padding: 50px 0;
+  }
+  
+  .notice-faq-section .card-title {
+    min-height: auto;
+  }
+  
+  .notice-faq-section .card-text {
+    min-height: auto;
+  }
+}
