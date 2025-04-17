@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './resources/css/style.css';
 
 import Home from './components/common/Home';
+import Premium from './components/premium/Premium';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/premium" element={<Premium />} />
           </Routes>
         </div>
       </div>
