@@ -134,9 +134,8 @@ const Header = () => {
         {/* 오른쪽 메뉴 */}
         <Nav className="right-menu ms-auto fw-bold">
           <Nav.Link 
-            href="#premium-section" 
-            className={activeSection === 'premium-section' ? 'active' : ''}
-            onClick={(e) => handleNavLinkClick(e, 'premium-section')}
+            as={Link}
+            to="/premium"
           >
             로또메이트+
           </Nav.Link>
