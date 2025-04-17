@@ -1356,3 +1356,493 @@ html {
     min-height: auto;
   }
 }
+
+/* 프리미엄 페이지 스타일 */
+
+/* 히어로 섹션 */
+.premium-hero-section {
+  background: linear-gradient(135deg, #2c3e50, #4a69bd);
+  color: white;
+  padding: 120px 0 80px;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.premium-hero-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.premium-hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 80%;
+  margin: 0 auto;
+  animation: fadeInUp 1s ease-out;
+}
+
+.hero-cta-button {
+  animation: pulse 2s infinite;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+}
+
+/* 섹션 공통 스타일 */
+.section-title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.section-subtitle {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+/* 혜택 카드 */
+.benefits-section {
+  background-color: #fff;
+}
+
+.benefit-card {
+  background-color: white;
+  padding: 2rem;
+  height: 100%;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+  margin-bottom: 1.5rem;
+  color: #3498db;
+}
+
+.benefit-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.benefit-description {
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+/* 결제 주기 토글 */
+.billing-toggle {
+  margin-bottom: 2rem;
+}
+
+.billing-period {
+  font-weight: 500;
+  color: #7f8c8d;
+  transition: all 0.3s ease;
+}
+
+.billing-period.active {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.form-switch .form-check-input {
+  width: 3rem;
+  height: 1.5rem;
+  cursor: pointer;
+}
+
+/* 요금제 카드 */
+.pricing-cards {
+  margin-bottom: 2rem;
+}
+
+.pricing-card {
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  position: relative;
+}
+
+.pricing-card.selected {
+  border-color: #3498db;
+  transform: scale(1.03);
+  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.2);
+}
+
+.pricing-card.popular {
+  border-color: #f39c12;
+}
+
+.popular-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f39c12;
+  color: white;
+  padding: 5px 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-bottom-left-radius: 8px;
+  z-index: 1;
+}
+
+.pricing-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.5rem 1rem;
+}
+
+.plan-name {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.price-container {
+  padding: 1.5rem 0;
+}
+
+.price-currency {
+  font-size: 1.5rem;
+  font-weight: 600;
+  vertical-align: top;
+  position: relative;
+  top: 0.5rem;
+}
+
+.price-amount {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #2c3e50;
+}
+
+.price-period {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-left: 4px;
+}
+
+.yearly-price {
+  font-size: 0.9rem;
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.feature-item {
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.feature-icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.feature-icon.included {
+  color: #27ae60;
+}
+
+.feature-icon.not-included {
+  color: #e74c3c;
+}
+
+.feature-item.not-included {
+  color: #95a5a6;
+}
+
+.select-plan-btn {
+  border-radius: 30px;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+}
+
+/* 선택된 플랜 요약 */
+.selected-plan-summary {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  margin-top: 3rem;
+}
+
+.selected-plan-details {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.selected-plan-features {
+  list-style: none;
+  padding: 0;
+}
+
+.selected-plan-features li {
+  margin-bottom: 0.5rem;
+}
+
+.total-price-container {
+  font-size: 1.1rem;
+}
+
+.total-price-label {
+  font-weight: 500;
+}
+
+.total-price-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.subscribe-btn {
+  border-radius: 30px;
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+}
+
+.subscription-note {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* 플랜 비교표 */
+.plan-comparison-section {
+  background-color: #f8f9fa;
+}
+
+.plan-comparison-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.plan-comparison-table th {
+  background-color: #f1f3f5;
+  padding: 1.2rem 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.plan-comparison-table td {
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+.plan-comparison-table th:first-child,
+.plan-comparison-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* 사용자 후기 섹션 */
+.testimonial-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  position: relative;
+}
+
+.testimonial-rating {
+  margin-bottom: 1.2rem;
+}
+
+.star-icon {
+  color: #f39c12;
+  font-size: 1.2rem;
+  margin-right: 0.2rem;
+}
+
+.testimonial-content {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #34495e;
+  font-style: italic;
+}
+
+.testimonial-author {
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+}
+
+.author-name {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: #2c3e50;
+}
+
+.subscription-info {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+/* FAQ 섹션 */
+.faq-section {
+  background-color: #f8f9fa;
+}
+
+.faq-accordion .accordion-item {
+  border: none;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.faq-accordion .accordion-button {
+  font-weight: 600;
+  padding: 1.2rem;
+  color: #2c3e50;
+  background-color: white;
+}
+
+.faq-accordion .accordion-button:not(.collapsed) {
+  color: #3498db;
+  background-color: #f8f9fa;
+  box-shadow: none;
+}
+
+.faq-accordion .accordion-body {
+  padding: 1.2rem;
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* CTA 섹션 */
+.cta-section {
+  background: linear-gradient(135deg, #3498db, #2c3e50);
+  color: white;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.cta-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.cta-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background-color: white;
+  color: #3498db;
+  border: none;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+  background-color: #f8f9fa;
+  color: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 반응형 스타일 */
+@media (max-width: 991.98px) {
+  .premium-hero-section {
+    padding: 100px 0 60px;
+  }
+  
+  .premium-hero-title {
+    font-size: 2.3rem;
+  }
+  
+  .pricing-card.selected {
+    transform: scale(1.02);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .premium-hero-section {
+    padding: 80px 0 50px;
+  }
+  
+  .premium-hero-title {
+    font-size: 2rem;
+  }
+  
+  .benefit-card {
+    padding: 1.5rem;
+  }
+  
+  .benefit-title {
+    font-size: 1.2rem;
+  }
+  
+  .total-price-container {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  
+  .subscribe-btn {
+    width: 100%;
+  }
+  
+  .pricing-card.selected {
+    transform: none;
+  }
+}
