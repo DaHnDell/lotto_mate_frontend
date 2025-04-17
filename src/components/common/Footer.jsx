@@ -103,23 +103,27 @@ const Footer = () => {
               <li><Link to="/privacy">개인정보처리방침</Link></li>
               <li><Link to="/contact">고객센터</Link></li>
             </ul>
-            <div className="social-links mt-3">
-              <a href="mailto:sophia76256@gmail.com" className="social-icon me-4" aria-label="이메일 보내기">
-                <Envelope size={20} />
-              </a>
-              <a href="https://github.com/DaHnDell/lotto_mate_frontend" target="_blank" rel="noopener noreferrer" className="social-icon me-4" aria-label="깃허브 방문하기">
-                <Github size={20} />
-              </a>
-              <a href="tel:+82-10-5191-9852" className="social-icon" aria-label="전화 걸기">
-                <Telephone size={20} />
-              </a>
-            </div>
           </Col>
         </Row>
-        
         <hr className="footer-divider" />
         
         <Row className="footer-bottom">
+          <Row>
+            <Col md={6} />
+            <Col md={6}>
+              <div className="social-links mb-2 justify-content-md-end d-flex ">
+                <a href="mailto:sophia76256@gmail.com" className="social-icon me-3" aria-label="이메일 보내기">
+                  <Envelope size={20} />
+                </a>
+                <a href="https://github.com/DaHnDell/lotto_mate_frontend" target="_blank" rel="noopener noreferrer" className="social-icon me-3" aria-label="깃허브 방문하기">
+                  <Github size={20} />
+                </a>
+                <a href="tel:+82-10-5191-9852" className="social-icon" aria-label="전화 걸기">
+                  <Telephone size={20} />
+                </a>
+              </div>
+            </Col>
+          </Row>
           <Col md={6} className="copyright">
             <p>&copy; {new Date().getFullYear()} 로또메이트. All rights reserved.</p>
           </Col>
