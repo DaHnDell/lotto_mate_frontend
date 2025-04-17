@@ -1,14 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Accordion, Table, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircleFill, XCircleFill, StarFill, CreditCard, Lightning, Gift, QuestionCircleFill } from 'react-bootstrap-icons';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
+import PaymentService from '../../services/PaymentService';
+// import { useAuth } from '../../hooks/AuthContext';
 import '../../resources/css/style.css';
+
+// 포트원 SDK 스크립트 추가
+const loadPortOneScript = () => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.iamport.kr/v1/iamport.js';
+    script.async = true;
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error('포트원 스크립트 로드에 실패했습니다.'));
+    document.head.appendChild(script);
+  });
+};
 
 const Premium = () => {
   const [selectedPlan, setSelectedPlan] = useState('standard');
   const [billingPeriod, setBillingPeriod] = useState('monthly');
+  const [isPortOneLoaded, setIsPortOneLoaded] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [user, setUser] = useState({email: '', name: '', phone: ''});
+
+  // const { user } = useAuth();
+  const navigate = useNavigate();
+  const paymentService = PaymentService();
 
   // 구독 요금제 정보
   const plans = {
@@ -32,7 +53,7 @@ const Premium = () => {
     standard: {
       name: 'STANDARD',
       monthlyPrice: 9000,
-      yearlyPrice: 90000, // 연간 구독 시 12개월 가격 (2개월 무료)
+      yearlyPrice: 90000,
       popular: true,
       features: [
         '주 2회 자동 번호 구매',
@@ -49,7 +70,7 @@ const Premium = () => {
     premium: {
       name: 'PREMIUM',
       monthlyPrice: 12000,
-      yearlyPrice: 120000, // 연간 구독 시 12개월 가격 (2개월 무료)
+      yearlyPrice: 120000,
       features: [
         '주 3회 자동 번호 구매',
         '번호 분석 리포트',
@@ -88,6 +109,24 @@ const Premium = () => {
     }
   ];
 
+  // 포트원 SDK 로드
+  useEffect(() => {
+    const loadScript = async () => {
+      try {
+        const script = await loadPortOneScript();
+        setIsPortOneLoaded(true);
+        return () => {
+          document.head.removeChild(script);
+        };
+      } catch (error) {
+        console.error('포트원 스크립트 로드 실패:', error);
+        alert('결제 모듈을 불러오는데 실패했습니다. 페이지를 새로 고침해주세요.');
+      }
+    };
+    
+    loadScript();
+  }, []);
+
   // 요금제 선택 핸들러
   const handlePlanSelect = (plan) => {
     setSelectedPlan(plan);
@@ -98,17 +137,95 @@ const Premium = () => {
     setBillingPeriod(period);
   };
 
-  // 현재 선택된 플랜의 가격 계산
-  // const calculatePrice = (plan) => {
-  //   return billingPeriod === 'monthly' 
-  //     ? plans[plan].monthlyPrice 
-  //     : plans[plan].yearlyPrice;
-  // };
-
   // 구독하기 버튼 클릭 핸들러
-  const handleSubscribe = () => {
-    // 결제 페이지로 이동하는 로직 구현
-    console.log(`구독 신청: ${selectedPlan} 플랜, ${billingPeriod} 결제`);
+  const handleSubscribe = async () => {
+    setUser({email: 'sophia76256@gmail.com', name: '허정윤', phone: '010-1234-5678'});
+
+    // 로그인 체크
+    if (!user) {
+      alert('구독을 시작하려면 로그인이 필요합니다.');
+      navigate('/login', { state: { from: '/premium' } });
+      return;
+    }
+    
+    if (!isPortOneLoaded) {
+      alert('결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+    
+    try {
+      setIsProcessingPayment(true);
+      
+      const { IMP } = window;
+      // 가맹점 식별코드 초기화
+      IMP.init('your_imp_code'); // 포트원에서 발급받은 가맹점 식별코드
+      
+      // 결제 데이터 준비
+      const selectedPlanData = plans[selectedPlan];
+      const price = billingPeriod === 'monthly' 
+        ? selectedPlanData.monthlyPrice 
+        : selectedPlanData.yearlyPrice;
+      
+      // 고유 주문번호 생성
+      const merchantUid = `subscription_${Date.now()}_${Math.random().toString(36).substr(2, 11)}`;
+      
+      // 결제 요청
+      IMP.request_pay({
+        pg: 'inicis', // PG사 (실제 계약한 PG사로 변경)
+        pay_method: 'card', // 결제 수단
+        merchant_uid: merchantUid, // 주문번호
+        name: `로또메이트+ ${selectedPlanData.name} ${billingPeriod === 'monthly' ? '월간' : '연간'} 구독`, // 주문명
+        amount: price, // 결제금액
+        buyer_email: user.email || '', // 구매자 이메일
+        buyer_name: user.name || '', // 구매자 이름
+        buyer_tel: user.phone || '', // 구매자 전화번호
+        // 정기결제 설정 (월간 구독에만 적용)
+        ...(billingPeriod === 'monthly' && {
+          period: {
+            interval: 1, // 1개월마다
+            interval_count: 1, // 1회씩
+            start_date: new Date().toISOString().split('T')[0].replace(/-/g, ''), // YYYYMMDD 형식
+            end_date: '' // 무제한
+          }
+        })
+      }, async function(response) {
+        if (response.success) {
+          try {
+            // 결제 검증 및 구독 정보 저장
+            const subscriptionInfo = {
+              plan: selectedPlan,
+              period: billingPeriod,
+              amount: price
+            };
+            
+            const result = await paymentService.verifyPaymentAndCreateSubscription(
+              { imp_uid: response.imp_uid, merchant_uid: response.merchant_uid },
+              subscriptionInfo
+            );
+            
+            // 구독 완료 페이지로 이동
+            navigate('/subscription/complete', { 
+              state: { 
+                impUid: response.imp_uid,
+                subscriptionId: result.subscriptionId 
+              } 
+            });
+          } catch (error) {
+            console.error('결제 검증 실패:', error);
+            alert('결제는 성공했으나 서버에서 검증에 실패했습니다. 고객센터에 문의해주세요.');
+          }
+        } else {
+          // 결제 실패 시 처리
+          console.error('결제 실패', response);
+          alert(`결제에 실패했습니다: ${response.error_msg}`);
+        }
+      });
+    } catch (error) {
+      console.error('결제 프로세스 오류:', error);
+      alert('결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -298,8 +415,9 @@ const Premium = () => {
                   size="lg" 
                   className="mt-3 subscribe-btn"
                   onClick={handleSubscribe}
+                  disabled={isProcessingPayment || !isPortOneLoaded}
                 >
-                  구독하기
+                  {isProcessingPayment ? '처리 중...' : '구독하기'}
                 </Button>
                 <p className="subscription-note mt-2">
                   구독 즉시 프리미엄 기능이 활성화됩니다
