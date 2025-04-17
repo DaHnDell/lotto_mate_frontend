@@ -896,20 +896,30 @@ html {
 }
 
 /* 번호 선택 그리드 */
+/* 번호 선택 그리드 스타일 */
 .number-grid {
+  width: 100%;
+  overflow: hidden;
+}
+
+.number-grid-inner {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 8px;
-  margin-bottom: 20px;
+  margin: 0 auto;
 }
 
+/* 번호 버튼 스타일 */
 .number-btn {
-  width: 70%;
   aspect-ratio: 1;
+  width: 100%;
+  max-width: 40px;
+  padding: 0;
+  margin: 0 auto;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
   border-radius: 50%;
   transition: all 0.2s ease;
 }
@@ -917,6 +927,171 @@ html {
 .number-btn.selected {
   transform: scale(1.05);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 선택된 번호들 표시 영역 */
+.selected-numbers-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+/* 컨테이너 스타일 추가 */
+.user-selection-container,
+.random-numbers-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 번호 저장 영역을 하단으로 밀어내기 */
+.save-numbers {
+  margin-top: auto;
+}
+
+/* 로또 공 기본 스타일 - 기존 스타일 유지 */
+.lotto-ball {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: 600;
+  margin: 0 5px;
+  color: #fff;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 로또 공 크기 변형 - 기존 스타일 유지 */
+.lotto-ball-sm {
+  width: 30px;
+  height: 30px;
+  font-size: 0.8rem;
+  margin: 0 3px;
+}
+
+.lotto-ball-lg {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  margin: 0 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  font-weight: 700;
+}
+
+/* 인기 번호 표시 영역 */
+.popular-numbers-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+/* 번호 색상 - 기존 스타일 유지 */
+.lotto-ball-1 { background-color: #ffd700; } /* 1~10: 노랑 */
+.lotto-ball-2 { background-color: #4169e1; } /* 11~20: 파랑 */
+.lotto-ball-3 { background-color: #ff6347; } /* 21~30: 빨강 */
+.lotto-ball-4 { background-color: #808080; } /* 31~40: 회색 */
+.lotto-ball-5 { background-color: #228b22; } /* 41~45: 초록 */
+
+/* 반응형 미디어 쿼리 */
+@media (max-width: 992px) {
+  .number-grid-inner {
+    grid-template-columns: repeat(9, 1fr);
+  }
+  
+  .number-btn {
+    max-width: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .number-grid-inner {
+    grid-template-columns: repeat(9, 1fr);
+    gap: 6px;
+  }
+  
+  .number-btn {
+    max-width: 30px;
+    font-size: 0.875rem;
+  }
+  
+  /* 모바일에서는 두 컨테이너의 높이를 각각 조절 */
+  .user-selection-container,
+  .random-numbers-container {
+    height: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .number-grid-inner {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+  }
+  
+  .number-btn {
+    max-width: 40px;
+  }
+}
+
+.row-equal-height {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row-equal-height > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-equal-height > [class*='col-'] > .user-selection-container,
+.row-equal-height > [class*='col-'] > .random-numbers-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 모바일에서 각 컨테이너를 독립적으로 표시 */
+@media (max-width: 992px) {
+  .row-equal-height {
+    display: block;
+  }
+  
+  .row-equal-height > [class*='col-'] {
+    display: block;
+  }
+  
+  .user-selection-container,
+  .random-numbers-container {
+    height: auto;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .number-grid-inner {
+    grid-template-columns: repeat(9, 1fr);
+    gap: 6px;
+  }
+  
+  .number-btn {
+    max-width: 30px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .number-grid-inner {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+  }
+  
+  .number-btn {
+    max-width: 40px;
+  }
 }
 
 /* 선택된 번호 개수 표시 */

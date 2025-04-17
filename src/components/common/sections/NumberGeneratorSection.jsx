@@ -72,7 +72,7 @@ const NumberGeneratorSection = () => {
           </Col>
         </Row>
         
-        <Row>
+        <Row className="row-equal-height">
           {/* 좌측: 사용자 선택 번호 */}
           <Col lg={6} className="mb-5 mb-lg-0">
             <div className="user-selection-container bg-white p-4 shadow-sm rounded">
@@ -84,23 +84,26 @@ const NumberGeneratorSection = () => {
                 </span>
               </p>
               
+              {/* 수정된 그리드 레이아웃 */}
               <div className="number-grid mb-4">
-                {Array.from({ length: 45 }, (_, i) => i + 1).map((number) => (
-                  <Button
-                    key={number}
-                    variant={userNumbers[number - 1] ? "primary" : "outline-secondary"}
-                    className={`number-btn ${userNumbers[number - 1] ? 'selected' : ''}`}
-                    onClick={() => handleNumberSelect(number - 1)}
-                    disabled={selectedCount >= 6 && !userNumbers[number - 1]}
-                  >
-                    {number}
-                  </Button>
-                ))}
+                <div className="number-grid-inner">
+                  {Array.from({ length: 45 }, (_, i) => i + 1).map((number) => (
+                    <Button
+                      key={number}
+                      variant={userNumbers[number - 1] ? "primary" : "outline-secondary"}
+                      className={`number-btn ${userNumbers[number - 1] ? 'selected' : ''}`}
+                      onClick={() => handleNumberSelect(number - 1)}
+                      disabled={selectedCount >= 6 && !userNumbers[number - 1]}
+                    >
+                      {number}
+                    </Button>
+                  ))}
+                </div>
               </div>
               
               <div className="d-flex justify-content-between align-items-center">
                 {selectedCount === 0 ? 
-                  <></> : 
+                  <div></div> : 
                   <Button 
                     variant="outline-danger" 
                     onClick={resetUserSelection}
@@ -124,24 +127,6 @@ const NumberGeneratorSection = () => {
                 </div>
               </div>
               
-              {selectedCount === 6 ? 
-                <div className="save-numbers text-center mt-4 pt-3 border-top">
-                  <Button variant="outline-primary" size="lg" className="w-100">
-                    이 번호 저장하기
-                  </Button>
-                  <p className="text-muted mt-2 small">
-                    <i className="bi bi-info-circle me-1"></i>
-                    번호를 저장하려면 로그인이 필요합니다.
-                  </p>
-                </div> :
-                <div className="save-numbers text-center mt-4 pt-3 border-top">
-                <p className="text-muted mt-2 fw-bold">
-                  <i className="bi bi-info-circle me-1"></i>
-                  6개 번호를 골라 주세요
-                </p>
-              </div>
-              } 
-
               {/* 인기 번호 표시 */}
               <div className="popular-numbers mt-4 pt-3 border-top">
                 <p className="popular-numbers-title fw-bold text-primary mb-2">
@@ -157,6 +142,26 @@ const NumberGeneratorSection = () => {
                     </span>
                   ))}
                 </div>
+              </div>
+              
+              {/* 저장 버튼 영역 */}
+              <div className="save-numbers text-center mt-4 pt-3 border-top">
+                {selectedCount === 6 ? (
+                  <>
+                    <Button variant="outline-primary" size="lg" className="w-100">
+                      이 번호 저장하기
+                    </Button>
+                    <p className="text-muted mt-2 small">
+                      <i className="bi bi-info-circle me-1"></i>
+                      번호를 저장하려면 로그인이 필요합니다.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-muted mt-2 fw-bold">
+                    <i className="bi bi-info-circle me-1"></i>
+                    6개 번호를 골라 주세요
+                  </p>
+                )}
               </div>
             </div>
           </Col>
@@ -192,7 +197,7 @@ const NumberGeneratorSection = () => {
                 </Button>
               </div>
               
-              <div className="random-option mt-5 mb-3 pt-4">
+              <div className="random-option mt-4 mb-3 pt-3">
                 <Form>
                   <Form.Check 
                     type="checkbox" 
@@ -208,6 +213,7 @@ const NumberGeneratorSection = () => {
                 </Form>
               </div>
               
+              {/* 저장 버튼 영역 */}
               <div className="save-numbers text-center mt-4 pt-3 border-top">
                 <Button variant="outline-primary" size="lg" className="w-100">
                   이 번호 저장하기
