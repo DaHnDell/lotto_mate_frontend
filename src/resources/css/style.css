@@ -1846,3 +1846,356 @@ html {
     transform: none;
   }
 }
+
+/* 구독 관련 페이지 공통 스타일 */
+.subscription-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* 구독 완료 페이지 스타일 */
+.subscription-complete-page .page-content {
+  padding-top: 120px;
+}
+
+.subscription-complete-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.subscription-complete-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon-circle {
+  width: 80px;
+  height: 80px;
+  background-color: rgba(25, 135, 84, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.subscription-details {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.subscription-details table {
+  margin-bottom: 0;
+}
+
+.subscription-details th {
+  width: 40%;
+  font-weight: 600;
+  color: #495057;
+}
+
+.subscription-details td {
+  font-weight: 500;
+}
+
+.benefit-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.benefit-list li {
+  padding: 8px 0;
+  position: relative;
+  padding-left: 25px;
+}
+
+.benefit-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.subscription-actions .btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+}
+
+/* 구독 관리 페이지 스타일 */
+.subscription-manage-page .page-content {
+  padding-top: 120px;
+}
+
+.subscription-info-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: none;
+}
+
+.subscription-info-card .card-header {
+  background-image: linear-gradient(to right, #0d6efd, #0a58ca);
+  padding: 1.5rem;
+}
+
+.subscription-info-card .card-header h3 {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.subscription-details-table {
+  margin-bottom: 0;
+}
+
+.subscription-details-table th {
+  width: 40%;
+  font-weight: 600;
+  color: #495057;
+  padding: 12px 8px;
+  border-top: none;
+}
+
+.subscription-details-table td {
+  font-weight: 500;
+  padding: 12px 8px;
+  border-top: none;
+}
+
+.payment-method-info {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.recent-payment-info {
+  margin-top: 1.5rem;
+}
+
+.recent-payment-details {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.subscription-price {
+  font-size: 1.1rem;
+}
+
+.plan-change-card {
+  border-radius: 12px;
+  margin-top: 2rem;
+  border: none;
+}
+
+/* 모달 스타일 */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: none;
+}
+
+.modal-title {
+  font-weight: 700;
+  color: #333;
+}
+
+.modal-body p {
+  margin-bottom: 1rem;
+}
+
+.modal-footer {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* 반응형 조정 */
+@media (max-width: 767.98px) {
+  .subscription-details th, 
+  .subscription-details-table th {
+    width: 50%;
+  }
+  
+  .subscription-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .subscription-actions .btn {
+    margin-bottom: 1rem;
+  }
+}
+
+/* 결제 플랜 카드 스타일 추가 커스터마이징 */
+.pricing-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card.selected {
+  border: 2px solid #0d6efd;
+  box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
+}
+
+.pricing-card.popular {
+  position: relative;
+  border: 2px solid #0d6efd;
+  box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
+}
+
+.popular-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #0d6efd;
+  color: white;
+  padding: 5px 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-bottom-left-radius: 8px;
+}
+
+.plan-name {
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.price-container {
+  margin: 1.5rem 0;
+}
+
+.price-currency {
+  font-size: 1.2rem;
+  vertical-align: top;
+  position: relative;
+  top: 0.5rem;
+  margin-right: 0.2rem;
+  font-weight: 600;
+}
+
+.price-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.price-period {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-left: 0.3rem;
+}
+
+.yearly-price {
+  font-size: 0.9rem;
+  color: #198754;
+  font-weight: 600;
+}
+
+.feature-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.feature-item {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-icon {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+.feature-icon.included {
+  color: #198754;
+}
+
+.feature-icon.not-included {
+  color: #dc3545;
+}
+
+.feature-item.not-included {
+  color: #6c757d;
+}
+
+.select-plan-btn {
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+}
+
+/* 선택된 플랜 요약 */
+.selected-plan-summary {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin-top: 3rem;
+}
+
+.selected-plan-details {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.selected-plan-features {
+  list-style: none;
+  padding-left: 0;
+}
+
+.selected-plan-features li {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.total-price-container {
+  font-size: 1.2rem;
+}
+
+.total-price-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0d6efd;
+}
+
+.total-price-period {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.subscribe-btn {
+  min-width: 200px;
+}
+
+.subscription-note {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
