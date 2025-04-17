@@ -8,9 +8,15 @@ import logo from '../../resources/img/logo3.png';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero-slider-section');
+  const [activePage, setActivePage] = useState('/');
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
+  
+  // 현재 페이지 경로 감지 및 활성 페이지 설정
+  useEffect(() => {
+    setActivePage(location.pathname);
+  }, [location.pathname]);
   
   // 스크롤 감지 및 현재 활성 섹션 업데이트
   useEffect(() => {
@@ -89,6 +95,20 @@ const Header = () => {
     }
   }, [isHomePage, location.state, navigate]);
 
+  // 현재 메뉴 항목이 활성화 상태인지 확인하는 함수
+  const isActive = (sectionId) => {
+    // 홈페이지일 경우 섹션 ID로 활성 상태 확인
+    if (isHomePage) {
+      return activeSection === sectionId;
+    }
+    return false;
+  };
+
+  // 특정 페이지가 활성화 상태인지 확인하는 함수
+  const isPageActive = (path) => {
+    return activePage.startsWith(path);
+  };
+
   return (
     <Navbar 
       expand="lg" 
@@ -101,14 +121,14 @@ const Header = () => {
         <Nav className="left-menu me-auto">
           <Nav.Link 
              href="#hero-slider-section" 
-             className={activeSection === 'hero-slider-section' ? 'active' : ''}
+             className={isActive('hero-slider-section') ? 'active' : ''}
              onClick={(e) => handleNavLinkClick(e, 'hero-slider-section')}
           >
             당첨 소식
           </Nav.Link>
           <Nav.Link 
             href="#number-generator-section" 
-            className={activeSection === 'number-generator-section' ? 'active' : ''}
+            className={isActive('number-generator-section') ? 'active' : ''}
             onClick={(e) => handleNavLinkClick(e, 'number-generator-section')}
           >
             번호 뽑기
@@ -136,12 +156,14 @@ const Header = () => {
           <Nav.Link 
             as={Link}
             to="/premium"
+            className={isPageActive('/premium') ? 'active' : ''}
           >
             로또메이트+
           </Nav.Link>
           <Nav.Link 
             as={Link} 
             to="/mypage"
+            className={isPageActive('/mypage') ? 'active' : ''}
           >
             마이페이지
           </Nav.Link>
