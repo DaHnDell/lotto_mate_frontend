@@ -83,7 +83,7 @@ const HeroSlider = () => {
             <div 
               className="slider-image" 
               style={{ 
-                backgroundImage: `linear-gradient(rgba(255, 255, 255, ${1 - imageOpacity}), rgba(255, 255, 255, ${1 - imageOpacity})), url(${background1})`,
+                backgroundImage: `linear-gradient(rgba(230, 235, 255, ${1 - imageOpacity}), rgba(230, 235, 255, ${1 - imageOpacity})), url(${background1})`,
               }}
             >
               <div className="slider-image-content">
