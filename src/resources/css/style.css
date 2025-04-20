@@ -2342,54 +2342,6 @@ html {
   gap: 0.5rem;
 }
 
-.lotto-ball {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-weight: bold;
-  font-size: 0.875rem;
-  color: #fff;
-}
-
-.lotto-ball-sm {
-  width: 28px;
-  height: 28px;
-  font-size: 0.75rem;
-}
-
-.lotto-ball-lg {
-  width: 44px;
-  height: 44px;
-  font-size: 1rem;
-}
-
-.lotto-ball-1 {
-  background-color: #ffc107;
-}
-
-.lotto-ball-2 {
-  background-color: #17a2b8;
-}
-
-.lotto-ball-3 {
-  background-color: #dc3545;
-}
-
-.lotto-ball-4 {
-  background-color: #6c757d;
-}
-
-.lotto-ball-5 {
-  background-color: #28a745;
-}
-
-.lotto-ball-bonus {
-  background-color: #fd7e14;
-}
-
 /* 저장된 번호 표시 */
 .saved-number-item {
   background-color: #f8f9fa;
