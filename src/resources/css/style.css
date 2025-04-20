@@ -2199,3 +2199,232 @@ html {
   font-size: 0.9rem;
   color: #6c757d;
 }
+
+
+/* 마이페이지 스타일 */
+.page-content {
+  background-color: var(--neutral-50);
+  min-height: calc(100vh - 200px);
+  padding-top: 80px !important;
+}
+
+.page-title {
+  color: #343a40;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.user-greeting {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 사이드바 네비게이션 */
+.mypage-sidebar {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.mypage-nav {
+  margin-bottom: 1.5rem;
+}
+
+.mypage-nav-item {
+  color: #495057;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mypage-nav-item:hover {
+  background-color: #f2f4f6;
+}
+
+.mypage-nav-item.active {
+  background-color: #e9ecef;
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.mypage-nav-item .icon {
+  margin-right: 0.5rem;
+}
+
+/* 컨텐츠 영역 */
+.mypage-content {
+  width: 100%;
+}
+
+.mypage-content .card {
+  margin-bottom: 1.5rem;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.mypage-content .card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+  font-weight: bold;
+}
+
+.mypage-content .card-body {
+  padding: 1.5rem;
+}
+
+/* 프로필 정보 */
+.profile-label {
+  font-weight: bold;
+  color: #6c757d;
+}
+
+.profile-value {
+  font-weight: normal;
+}
+
+.social-account-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.social-account-item:last-child {
+  border-bottom: none;
+}
+
+/* 구독 정보 */
+.subscription-plan {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.subscription-plan-name {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.subscription-price {
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.subscription-label {
+  font-weight: bold;
+  color: #6c757d;
+}
+
+.no-subscription {
+  padding: 2rem 0;
+}
+
+/* 로또 번호 표시 */
+.lotto-number-container {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lotto-ball {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: #fff;
+}
+
+.lotto-ball-sm {
+  width: 28px;
+  height: 28px;
+  font-size: 0.75rem;
+}
+
+.lotto-ball-lg {
+  width: 44px;
+  height: 44px;
+  font-size: 1rem;
+}
+
+.lotto-ball-1 {
+  background-color: #ffc107;
+}
+
+.lotto-ball-2 {
+  background-color: #17a2b8;
+}
+
+.lotto-ball-3 {
+  background-color: #dc3545;
+}
+
+.lotto-ball-4 {
+  background-color: #6c757d;
+}
+
+.lotto-ball-5 {
+  background-color: #28a745;
+}
+
+.lotto-ball-bonus {
+  background-color: #fd7e14;
+}
+
+/* 저장된 번호 표시 */
+.saved-number-item {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+/* 결제 수단 */
+.payment-method-item {
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  margin-bottom: 1rem;
+}
+
+/* 구독 이력 */
+.subscription-history-item,
+.payment-history-item,
+.winning-history-item {
+  border-radius: 5px;
+  background-color: #f8f9fa;
+}
+
+.subscription-history-price,
+.payment-amount,
+.winning-amount {
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .mypage-sidebar {
+    margin-bottom: 1.5rem;
+  }
+  
+  .subscription-history-item,
+  .payment-history-item,
+  .winning-history-item {
+    flex-direction: column;
+  }
+  
+  .subscription-history-price,
+  .payment-history-actions,
+  .winning-amount {
+    margin-top: 0.5rem;
+  }
+}
