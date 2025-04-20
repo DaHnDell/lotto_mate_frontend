@@ -1,7 +1,14 @@
 import React from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileTab = ({ userInfo, formatDate }) => {
+  const navigate = useNavigate();
+  
+  // 프로필 수정 페이지로 이동
+  const handleEditProfile = () => {
+    navigate('/profile/edit');
+  };
   return (
     <div className="profile-section">
       <Card className="mb-4">
@@ -32,7 +39,7 @@ const ProfileTab = ({ userInfo, formatDate }) => {
           </div>
           
           <div className="d-flex justify-content-end mt-4">
-            <Button variant="outline-primary" size="sm">
+            <Button variant="outline-primary" size="sm" onClick={handleEditProfile}>
               프로필 수정
             </Button>
           </div>

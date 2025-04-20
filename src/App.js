@@ -9,6 +9,7 @@ import Premium from './components/premium/Premium';
 import SubscriptionComplete from './components/premium/SubscriptionComplete';
 import SubscriptionManage from './components/premium/SubscriptionManage';
 import MyPage from './components/mypage/MyPage';
+import ProfileEdit from './components/mypage/ProfileEdit';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/premium" element={<Premium />} />
           <Route path='/mypage' element={<MyPage />} />
+          <Route path="/profile/edit" element={<ProfileEdit />} />
 
           {/* 결제 관련 라우팅 */}
           <Route path="/subscription/complete" element={<SubscriptionComplete />} />
