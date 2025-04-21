@@ -43,14 +43,19 @@ const LoginPage = () => {
     }
   };
   
+  const BACKEND_BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:8080'
+    : 'https://lottomateapi.eeerrorcode.com';
+
   // 백엔드 기반 구글 로그인 처리
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8080/api/auth/oauth2/authorize/GOOGLE';
+    window.location.href = `${BACKEND_BASE_URL}/api/auth/oauth2/authorize/GOOGLE`;
   };
-  
+
   // 백엔드 기반 카카오 로그인 처리
   const handleKakaoLogin = () => {
-    window.location.href = 'http://localhost:8080/api/auth/oauth2/authorize/KAKAO';
+    window.location.href = `${BACKEND_BASE_URL}/api/auth/oauth2/authorize/KAKAO`;
   };
 
   return (
