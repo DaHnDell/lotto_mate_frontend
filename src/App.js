@@ -11,7 +11,9 @@ import MyPage from './components/mypage/MyPage';
 import ProfileEdit from './components/mypage/ProfileEdit';
 import AdminRoutes from './routes/AdminRoutes';
 import LoginPage from './components/user/LoginPage';
+import SignupPage from './components/user/SignupPage';
 import NotFoundPage from './components/common/NotFoundPage';
+import OAuth2CallbackHandler from './components/auth/OAuth2CallbackHandler';
 
 function App() {
   return (
@@ -25,7 +27,9 @@ function App() {
           
           {/* 관리자 라우트 */}
           <Route path="/login/*" element={<LoginPage />} />
-          
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/oauth/callback" element={<OAuth2CallbackHandler />} />
+
           {/* 결제 관련 라우팅 */}
           <Route path="/subscription/complete" element={<SubscriptionComplete />} />
           <Route path="/mypage/subscription" element={<SubscriptionManage />} />
