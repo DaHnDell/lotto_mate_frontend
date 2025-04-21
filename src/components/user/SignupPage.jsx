@@ -164,26 +164,76 @@ const SignupPage = () => {
     try {
       // UseAxios hook을 사용하여 회원가입 API 호출
       const response = await req('POST', 'auth/signup', { email, name, password });
-      
-      // 회원가입 성공
-      if(response.data){
+      console.log("회원가입 응답:", response);
+      // CommonResponse 형식에 맞게 응답 처리
+      if (response && response.message && !response.error) {
         setSuccessMsg('회원가입이 완료되었습니다! 잠시 후 로그인 페이지로 이동합니다.');
-        // 3초 후 로그인 페이지로 이동
-        setTimeout(() => {
-          navigate('/login');
-        }, 3000);
+        
+        // 알림창 표시
+        alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
+        navigate('/login');
       }
-      
-      
     } catch (error) {
       console.error('회원가입 오류:', error);
       
-      // 서버에서 전달받은 오류 메시지가 있으면 사용, 없으면 기본 메시지 표시
-      const errorMessage = error.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.';
-      setErrorMsg(errorMessage);
+      // 서버에서 전달받은 오류 메시지 확인
+      if (error.response?.data) {
+        const errorData = error.response.data;
+        
+        // CommonResponse 형식의 오류 메시지 처리
+        if (errorData.message) {
+          setErrorMsg(errorData.message);
+        } else if (errorData.code === 'REGISTRATION_ERROR') {
+          setErrorMsg(errorData.message || '이미 등록된 이메일입니다.');
+        } else {
+          setErrorMsg('회원가입에 실패했습니다. 다시 시도해주세요.');
+        }
+      } else {
+        setErrorMsg('회원가입에 실패했습니다. 다시 시도해주세요.');
+      }
     }
   };
   
+  // 이메일 중복 확인 함수
+const checkEmailDuplication = async (email) => {
+  if (!email || !isValidEmail(email)) return;
+  
+  try {
+    const response = await req('GET', `user/check-email?email=${encodeURIComponent(email)}`);
+    
+    // CommonResponse 형식에 맞게 응답 처리
+    if (response && response.code === 'success' && response.data) {
+      if (response.data.duplicated) {
+        setErrorMsg('이미 등록된 이메일입니다.');
+        return true; // 중복됨
+      }
+      return false; // 중복되지 않음
+    }
+    return false;
+  } catch (error) {
+    console.error('이메일 중복 확인 오류:', error);
+    return false;
+  }
+};
+
+  // 이메일 형식 검사 함수
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // 이메일 필드에 blur 이벤트 핸들러 추가
+  const handleEmailBlur = async () => {
+    const isDuplicated = await checkEmailDuplication(formData.email);
+    if (isDuplicated) {
+      // 중복된 경우 처리 (이미 에러 메시지는 설정됨)
+    } else if (formData.email && !isValidEmail(formData.email)) {
+      setErrorMsg('올바른 이메일 형식이 아닙니다.');
+    } else {
+      setErrorMsg(''); // 에러 메시지 초기화
+    }
+  };
+
   // 비밀번호 강도 표시
   const renderPasswordStrength = () => {
     const { minLength, hasNumber, hasSpecial, hasUpper } = passwordValidation;
@@ -236,10 +286,6 @@ const SignupPage = () => {
           <div className="login-form-container">
             <h2 className="login-title">Sign Up</h2>
             
-            {errorMsg && (
-              <div className="login-error-message">{errorMsg}</div>
-            )}
-            
             {successMsg && (
               <div className="login-success-message">{successMsg}</div>
             )}
@@ -253,10 +299,14 @@ const SignupPage = () => {
                   name="email" 
                   value={formData.email}
                   onChange={handleChange}
+                  onBlur={handleEmailBlur}
                   placeholder="example@email.com" 
                   className="login-input"
                   required 
                 />
+                {errorMsg && (
+                  <div className="login-error-message">{errorMsg}</div>
+                )}
               </div>
               
               <div className="login-form-group">
@@ -398,8 +448,6 @@ const SignupPage = () => {
               <span className="login-register-text">Already have an account? </span>
               <Link to="/login" className="login-register-action">Sign in</Link>
             </div>
-            
-            
           </div>
         </div>
       </div>
