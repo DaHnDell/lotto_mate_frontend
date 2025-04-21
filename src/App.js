@@ -11,6 +11,7 @@ import MyPage from './components/mypage/MyPage';
 import ProfileEdit from './components/mypage/ProfileEdit';
 import AdminRoutes from './routes/AdminRoutes';
 import LoginPage from './components/user/LoginPage';
+import NotFoundPage from './components/common/NotFoundPage';
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
 
           {/* 관리자 라우트 */}
           <Route path="/admin/*" element={<AdminRoutes />} />
+
+          {/* 404 페이지 - 모든 라우트 마지막에 위치 */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </div>
