@@ -4,6 +4,7 @@
 @import './color-scheme.css';
 @import './button.css';
 @import './typography.css';
+@import './admin-style.css';
 
 .noto-sans-kr {
   font-family: "Noto Sans KR", sans-serif;
