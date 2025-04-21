@@ -10,6 +10,7 @@ import SubscriptionManage from './components/premium/SubscriptionManage';
 import MyPage from './components/mypage/MyPage';
 import ProfileEdit from './components/mypage/ProfileEdit';
 import AdminRoutes from './routes/AdminRoutes';
+import LoginPage from './components/user/LoginPage';
 
 function App() {
   return (
@@ -20,7 +21,10 @@ function App() {
           <Route path="/premium" element={<Premium />} />
           <Route path='/mypage' element={<MyPage />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
-
+          
+          {/* 관리자 라우트 */}
+          <Route path="/login/*" element={<LoginPage />} />
+          
           {/* 결제 관련 라우팅 */}
           <Route path="/subscription/complete" element={<SubscriptionComplete />} />
           <Route path="/mypage/subscription" element={<SubscriptionManage />} />
