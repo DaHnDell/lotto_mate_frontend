@@ -1,6 +1,10 @@
 # 1. Node 환경에서 빌드
 FROM node:20 AS builder
 WORKDIR /app
+
+# yarn registry 변경
+RUN yarn config set registry https://registry.npmjs.org/
+
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
