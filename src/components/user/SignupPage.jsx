@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import UseAxios from '../../hooks/UseAxios';
 import { Eye, EyeSlash, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import '../../resources/css/login.css';
-import logo from '../../resources/img/logo3.png';
+// import logo from '../../resources/img/logo3.png'; // 이 줄을 아래 줄로 변경
+const logo = `${process.env.PUBLIC_URL}/resources/img/logo3.png`;
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -195,26 +196,26 @@ const SignupPage = () => {
   };
   
   // 이메일 중복 확인 함수
-const checkEmailDuplication = async (email) => {
-  if (!email || !isValidEmail(email)) return;
-  
-  try {
-    const response = await req('GET', `user/check-email?email=${encodeURIComponent(email)}`);
+  const checkEmailDuplication = async (email) => {
+    if (!email || !isValidEmail(email)) return;
     
-    // CommonResponse 형식에 맞게 응답 처리
-    if (response && response.code === 'success' && response.data) {
-      if (response.data.duplicated) {
-        setErrorMsg('이미 등록된 이메일입니다.');
-        return true; // 중복됨
+    try {
+      const response = await req('GET', `user/check-email?email=${encodeURIComponent(email)}`);
+      
+      // CommonResponse 형식에 맞게 응답 처리
+      if (response && response.code === 'success' && response.data) {
+        if (response.data.duplicated) {
+          setErrorMsg('이미 등록된 이메일입니다.');
+          return true; // 중복됨
+        }
+        return false; // 중복되지 않음
       }
-      return false; // 중복되지 않음
+      return false;
+    } catch (error) {
+      console.error('이메일 중복 확인 오류:', error);
+      return false;
     }
-    return false;
-  } catch (error) {
-    console.error('이메일 중복 확인 오류:', error);
-    return false;
-  }
-};
+  };
 
   // 이메일 형식 검사 함수
   const isValidEmail = (email) => {
