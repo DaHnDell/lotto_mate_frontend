@@ -6,7 +6,7 @@ import HeroSlider from './sections/HeroSlider';
 import NumberGeneratorSection from './sections/NumberGeneratorSection';
 import NoticeAndFaqSection from './sections/NoticeAndFaqSection'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../resources/css/style.css';
+import '/css/style.css'
 
 const Home = () => {
   const location = useLocation();

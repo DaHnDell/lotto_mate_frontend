@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 // import { useAuth } from '../../hooks/AuthContext';
-import '../../resources/css/style.css';
+import '/css/style.css'
 
 const ProfileEdit = () => {
   const [userInfo, setUserInfo] = useState(null);

@@ -6,7 +6,7 @@ import Header from '../common/Header';
 import Footer from '../common/Footer';
 import PaymentService from '../../services/PaymentService';
 // import { useAuth } from '../../hooks/AuthContext';
-import '../../resources/css/style.css';
+import '/css/style.css'
 
 // 포트원 SDK 스크립트 추가
 const loadPortOneScript = () => {

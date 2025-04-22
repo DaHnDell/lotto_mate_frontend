@@ -10,7 +10,7 @@ import {
   List, 
   X 
 } from 'react-bootstrap-icons';
-import logo from '../../resources/img/logo3.png';
+import logo from '/img/logo3.png';
 import '../../resources/css/admin-style.css';
 
 const AdminLayout = () => {

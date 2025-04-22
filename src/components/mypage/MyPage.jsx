@@ -11,7 +11,7 @@ import SecurityTab from './SecurityTab';
 import NotificationsTab from './NotificationsTab';
 import HistoryTab from './HistoryTab';
 import { useAuth } from '../../hooks/AuthContext';
-import '../../resources/css/style.css';
+import '/css/style.css'
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('profile');

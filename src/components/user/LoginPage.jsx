@@ -4,7 +4,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import UseAxios from '../../hooks/UseAxios';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import '../../resources/css/login.css';
-// import logo from '../../resources/img/logo3.png'; // 이 줄을 아래 줄로 변경
+// import logo from '/img/logo3.png'; // 이 줄을 아래 줄로 변경
 const logo = `${process.env.PUBLIC_URL}/resources/img/logo3.png`;
 
 const LoginPage = () => {
