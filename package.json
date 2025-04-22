@@ -1,7 +1,7 @@
 {
   "name": "lottomate_front",
   "version": "0.1.0",
-  "homepage": "http://lottomate.eeerrorcode.com",
+  "homepage": "/",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",

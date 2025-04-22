@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../resources/css/style.css';
 import logo from '../../resources/img/logo3.png';
@@ -12,6 +13,10 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
+  
+  // 인증 정보 불러오기
+  const { token } = useAuth();
+  const isLoggedIn = !!token;
   
   // 현재 페이지 경로 감지 및 활성 페이지 설정
   useEffect(() => {
@@ -160,13 +165,25 @@ const Header = () => {
           >
             로또메이트+
           </Nav.Link>
-          <Nav.Link 
-            as={Link} 
-            to="/mypage"
-            className={isPageActive('/mypage') ? 'active' : ''}
-          >
-            마이페이지
-          </Nav.Link>
+          
+          {/* 로그인 상태에 따라 다른 메뉴 표시 */}
+          {isLoggedIn ? (
+            <Nav.Link 
+              as={Link} 
+              to="/mypage"
+              className={isPageActive('/mypage') ? 'active' : ''}
+            >
+              마이페이지
+            </Nav.Link>
+          ) : (
+            <Nav.Link 
+              as={Link} 
+              to="/login"
+              className={isPageActive('/login') ? 'active' : ''}
+            >
+              로그인
+            </Nav.Link>
+          )}
         </Nav>
       </Container>
     </Navbar>

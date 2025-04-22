@@ -4,6 +4,7 @@
 @import './color-scheme.css';
 @import './button.css';
 @import './typography.css';
+@import './admin-style.css';
 
 .noto-sans-kr {
   font-family: "Noto Sans KR", sans-serif;
@@ -2262,6 +2263,16 @@ html {
   width: 100%;
 }
 
+/* 컨테이너 정렬 통일 */
+.mypage .container,
+.profile-edit .container {
+  max-width: 1200px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .mypage-content .card {
   margin-bottom: 1.5rem;
   border: none;
@@ -2332,54 +2343,6 @@ html {
   gap: 0.5rem;
 }
 
-.lotto-ball {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-weight: bold;
-  font-size: 0.875rem;
-  color: #fff;
-}
-
-.lotto-ball-sm {
-  width: 28px;
-  height: 28px;
-  font-size: 0.75rem;
-}
-
-.lotto-ball-lg {
-  width: 44px;
-  height: 44px;
-  font-size: 1rem;
-}
-
-.lotto-ball-1 {
-  background-color: #ffc107;
-}
-
-.lotto-ball-2 {
-  background-color: #17a2b8;
-}
-
-.lotto-ball-3 {
-  background-color: #dc3545;
-}
-
-.lotto-ball-4 {
-  background-color: #6c757d;
-}
-
-.lotto-ball-5 {
-  background-color: #28a745;
-}
-
-.lotto-ball-bonus {
-  background-color: #fd7e14;
-}
-
 /* 저장된 번호 표시 */
 .saved-number-item {
   background-color: #f8f9fa;
@@ -2426,5 +2389,52 @@ html {
   .payment-history-actions,
   .winning-amount {
     margin-top: 0.5rem;
+  }
+}
+
+
+/* 프로필 수정 페이지 스타일 */
+.profile-edit .page-content {
+  padding-top: 80px; /* 헤더 높이만큼 상단 여백 추가 */
+}
+
+.profile-edit .page-title {
+  color: #343a40;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.default-profile-image {
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #6c757d;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .profile-edit .page-content {
+    padding-top: 70px;
+  }
+  
+  .profile-image-container {
+    margin-bottom: 2rem;
   }
 }
