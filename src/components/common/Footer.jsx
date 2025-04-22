@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '/css/style.css'
-import logo from '/img/logo3.png';
+import '../../resources/css/style.css';
+import logo from '../../resources/img/logo3.png';
 // Bootstrap 아이콘 추가
 import { Envelope, Github, Telephone, Apple, Android } from 'react-bootstrap-icons';
 

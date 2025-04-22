@@ -3,8 +3,8 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '/css/style.css'
-import logo from '/img/logo3.png';
+import '../../resources/css/style.css';
+import logo from '../../resources/img/logo3.png';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);

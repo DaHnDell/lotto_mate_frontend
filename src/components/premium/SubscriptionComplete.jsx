@@ -5,7 +5,7 @@ import { CheckCircleFill } from 'react-bootstrap-icons';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 import PaymentService from '../../services/PaymentService';
-import '/css/style.css'
+import '../../resources/css/style.css';
 
 const SubscriptionComplete = () => {
   const location = useLocation();
