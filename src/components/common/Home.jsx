@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-// import HeroSlider from './sections/HeroSlider';
+import HeroSlider from './sections/HeroSlider';
 import NumberGeneratorSection from './sections/NumberGeneratorSection';
 import NoticeAndFaqSection from './sections/NoticeAndFaqSection'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -59,9 +59,9 @@ const Home = () => {
       
       <main className="main-content">
         {/* 각 섹션에 id 속성 추가 */}
-        {/* <div id="hero-slider-section">
+        <div id="hero-slider-section">
           <HeroSlider />
-        </div> */}
+        </div>
 
         {/* 번호 뽑기 섹션 */}
         <div id="number-generator-section">
