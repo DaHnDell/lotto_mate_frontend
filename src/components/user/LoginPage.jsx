@@ -6,10 +6,6 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import '../../resources/css/login.css';
 import logo from '../../resources/img/logo3.png';
 
-// 소셜 로그인 아이콘을 위한 이미지 임포트 (실제 프로젝트에 추가 필요)
-import googleIcon from '../../resources/img/google-icon.svg';
-import kakaoIcon from '../../resources/img/kakao-icon.svg';
-
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -197,7 +193,7 @@ const LoginPage = () => {
                 className="login-social-btn login-google"
                 onClick={() => handleSocialLogin('GOOGLE')}
               >
-                <img src={googleIcon} alt="Google 로그인" className="social-icon" />
+                <img src={`${process.env.PUBLIC_URL}/google-icon.svg`} alt="Google 로그인" className="social-icon" />
                 <span className="social-btn-text">Google 계정으로 로그인</span>
               </button>
               
@@ -206,7 +202,7 @@ const LoginPage = () => {
                 className="login-social-btn login-kakao"
                 onClick={() => handleSocialLogin('KAKAO')}
               >
-                <img src={kakaoIcon} alt="Kakao 로그인" className="social-icon" />
+                <img src={`${process.env.PUBLIC_URL}/kakao-icon.svg`} alt="Kakao 로그인" className="social-icon" />
                 <span className="social-btn-text">카카오 계정으로 로그인</span>
               </button>
             </div>
