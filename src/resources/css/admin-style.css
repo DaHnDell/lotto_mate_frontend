@@ -16,6 +16,26 @@
   --transition-speed: 0.3s;
 }
 
+.admin-layout .btn-primary, 
+.admin-layout .btn.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--text-white) !important;
+}
+
+.admin-layout .btn-outline-primary, 
+.admin-layout .btn.btn-outline-primary {
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  background-color: transparent !important;
+}
+
+.admin-layout .btn-outline-primary:hover, 
+.admin-layout .btn.btn-outline-primary:hover {
+  background-color: var(--primary) !important;
+  color: var(--text-white) !important;
+}
+
 /* 레이아웃 기본 설정 */
 .admin-layout {
   display: flex;
@@ -438,4 +458,250 @@
     justify-content: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
+}
+
+/* 구독관리 컴포넌트 스타일 개선 */
+
+/* 카드 스타일 */
+.subscription-management .card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.subscription-management .card-header {
+  background-color: var(--neutral-50);
+  border-bottom: 1px solid var(--neutral-100);
+  padding: 16px 20px;
+}
+
+.subscription-management .card-body {
+  padding: 20px;
+}
+
+/* 탭 스타일 개선 */
+.subscription-management .nav-tabs {
+  border-bottom: 1px solid var(--neutral-200);
+  margin-bottom: 20px;
+}
+
+.subscription-management .nav-tabs .nav-link {
+  color: var(--neutral-600);
+  border: none;
+  padding: 10px 20px;
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.subscription-management .nav-tabs .nav-link:hover {
+  color: var(--primary);
+  background-color: var(--neutral-50);
+}
+
+.subscription-management .nav-tabs .nav-link.active {
+  color: var(--primary);
+  border-bottom: 3px solid var(--primary);
+  background-color: transparent;
+}
+
+/* 테이블 스타일 개선 */
+.subscription-management .table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.subscription-management .table th {
+  background-color: var(--neutral-50);
+  color: var(--neutral-700);
+  font-weight: 600;
+  border-bottom: 1px solid var(--neutral-200);
+  padding: 12px 16px;
+}
+
+.subscription-management .table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--neutral-100);
+  vertical-align: middle;
+}
+
+.subscription-management .table tr:hover {
+  background-color: var(--neutral-50);
+}
+
+/* 배지 스타일 */
+.subscription-management .badge {
+  padding: 5px 10px;
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+.subscription-management .badge.bg-success {
+  background-color: var(--success) !important;
+}
+
+.subscription-management .badge.bg-danger {
+  background-color: var(--danger) !important;
+}
+
+.subscription-management .badge.bg-warning {
+  background-color: var(--warning) !important;
+  color: var(--text-dark) !important;
+}
+
+.subscription-management .badge.bg-info {
+  background-color: var(--info) !important;
+}
+
+.subscription-management .badge.bg-secondary {
+  background-color: var(--neutral-400) !important;
+}
+
+/* 알림 스타일 */
+.subscription-management .alert {
+  border: none;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.subscription-management .alert-info {
+  background-color: var(--info-light);
+  color: var(--info-dark);
+}
+
+.subscription-management .alert-warning {
+  background-color: var(--warning-light);
+  color: var(--warning-dark);
+}
+
+.subscription-management .alert-danger {
+  background-color: var(--danger-light);
+  color: var(--danger-dark);
+}
+
+/* 버튼 그룹 스타일 */
+.subscription-management .btn {
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-weight: 500;
+}
+
+.subscription-management .btn-sm {
+  padding: 4px 12px;
+  font-size: 0.875rem;
+}
+
+/* 모달 스타일 */
+.subscription-management .modal-content {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.subscription-management .modal-header {
+  background-color: var(--neutral-50);
+  border-bottom: 1px solid var(--neutral-100);
+  padding: 16px 20px;
+}
+
+.subscription-management .modal-title {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.subscription-management .modal-body {
+  padding: 20px;
+}
+
+.subscription-management .modal-footer {
+  border-top: 1px solid var(--neutral-100);
+  padding: 16px 20px;
+}
+
+/* 폼 컨트롤 스타일 */
+.subscription-management .form-control {
+  border: 1px solid var(--neutral-300);
+  border-radius: 5px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.subscription-management .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+}
+
+.subscription-management .form-label {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.subscription-management .form-text {
+  color: var(--neutral-500);
+}
+
+/* 토글 버튼 아이콘 색상 */
+.subscription-management .toggle-on {
+  color: var(--success);
+}
+
+.subscription-management .toggle-off {
+  color: var(--neutral-500);
+}
+
+/* 스피너 색상 */
+.subscription-management .spinner-border {
+  color: var(--primary) !important;
+}
+
+/* 페이지 제목 스타일 */
+.subscription-management .page-title {
+  color: var(--text-dark);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* 토글 버튼 스타일 개선 */
+.subscription-management .btn-outline-secondary,
+.subscription-management .btn-outline-success {
+  border: none;
+  background-color: transparent;
+}
+
+/* OFF 상태(outline-secondary) 스타일 */
+.subscription-management .btn-outline-secondary svg {
+  color: var(--neutral-400);
+}
+
+.subscription-management .btn-outline-secondary:hover {
+  background-color: var(--neutral-100);
+  border: none;
+}
+
+/* ON 상태(outline-success) 스타일 */
+.subscription-management .btn-outline-success svg {
+  color: var(--primary);
+}
+
+.subscription-management .btn-outline-success:hover {
+  background-color: var(--primary-light);
+  border: none;
+}
+
+/* 모든 토글 버튼에 공통 스타일 */
+.subscription-management .btn-outline-secondary,
+.subscription-management .btn-outline-success {
+  padding: 4px 8px;
+  box-shadow: none;
+}
+
+.subscription-management .btn-outline-secondary:focus,
+.subscription-management .btn-outline-success:focus {
+  box-shadow: none;
+}
+
+.tab-name {
+  color: var(--text-dark) !important;
 }
