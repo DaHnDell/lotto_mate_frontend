@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-// import background1 from '../../../resources/img/lottomate-background.jpg'
-const background1 = process.env.PUBLIC_URL + '/lottomate-background.jpg';
+import background1 from '../../../resources/img/lottomate-background.jpg'
 
 const HeroSlider = () => {
   // 최근 당첨 번호
