@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+// import HeroSlider from './sections/HeroSlider';
+import NumberGeneratorSection from './sections/NumberGeneratorSection';
+import NoticeAndFaqSection from './sections/NoticeAndFaqSection'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../resources/css/style.css';
 
@@ -55,7 +58,20 @@ const Home = () => {
       <Header />
       
       <main className="main-content">
-        
+        {/* 각 섹션에 id 속성 추가 */}
+        {/* <div id="hero-slider-section">
+          <HeroSlider />
+        </div> */}
+
+        {/* 번호 뽑기 섹션 */}
+        <div id="number-generator-section">
+          <NumberGeneratorSection />
+        </div>
+
+        {/* 공지사항 및 FAQ 섹션 */}
+        <div id="notice-faq-section">
+          <NoticeAndFaqSection />
+        </div>
       </main>
       
       <Footer />
