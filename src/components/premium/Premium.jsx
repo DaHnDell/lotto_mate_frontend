@@ -171,7 +171,7 @@ const Premium = () => {
     setUser({email: `${email}`});
 
     // 로그인 체크
-    if (!user) {
+    if (user.email === '') {
       alert('구독을 시작하려면 로그인이 필요합니다.');
       navigate('/login', { state: { from: '/premium' } });
       return;
