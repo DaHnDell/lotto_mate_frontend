@@ -107,6 +107,62 @@ const HeroSlider = () => {
               </div>
             </div>
           </div>
+          {/* 슬라이더 리팩터 버전 - 엔드포인트연결 한민 */}
+          {/* <div className="slider-item">
+            <div
+              className="slider-image"
+              style={{
+                backgroundImage: `linear-gradient(rgba(230, 235, 255, ${1 - imageOpacity}), rgba(230, 235, 255, ${1 - imageOpacity})), url(${background1})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: '100%'
+              }}
+            >
+              <div className="slider-image-content">
+                <Container className="text-center">
+                  <h1>이번 주 당첨 번호는?</h1>
+                  <p className="fw-bold">실시간으로 업데이트되는 당첨 정보를 확인하세요</p>
+                  <Typography variant='body2' className='text-black' align='center'>
+                    제 {latestLotto.round}회차 ({latestLotto.date})
+                  </Typography>
+
+                  {!loading && latestLotto ? (
+                    <>
+                      <div
+                        className="lotto-number-container mt-4"
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
+                          gap: '0.5rem'
+                        }}
+                      >
+                        {latestLotto.numbers.map((num, index) => (
+                          <div
+                            className={`lotto-ball lotto-ball-${Math.ceil(num / 10)} mt-3`}
+                            key={index}
+                            style={{ width: '50px', height: '50px' }}
+                          >
+                            {num}
+                          </div>
+                        ))}
+                        <span className="lotto-plus">+</span>
+                        <span
+                          className="lotto-ball lotto-ball-bonus mt-3"
+                          style={{ width: '50px', height: '50px' }}
+                        >
+                          {latestLotto.bonusNumber}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-muted mt-3">로딩 중...</p>
+                  )}
+                </Container>
+              </div>
+            </div>
+          </div> */}
           
           {/* 슬라이드 2 - 당첨률 높은 번호 차트 */}
           <div className="slider-item">
@@ -158,6 +214,87 @@ const HeroSlider = () => {
               </div>
             </div>
           </div>
+          {/* 슬라이더 리팩터 버전 한민 */}
+          {/* <div className="slider-item">
+            <div
+              className="slider-image chart-slide"
+              style={{
+                background: `linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url(${background1})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: '100%' // 혹시라도 부모 높이가 지정 안 돼 있으면 추가
+              }}
+            >
+              <div className="slider-content">
+                <Container>
+                  <Row className="align-items-center">
+                  <Col lg={5} md={12} className="text-center text-lg-start mb-4 mb-lg-0">
+                      <Typography variant="h4" component="h1" gutterBottom>
+                        당첨률 높은 번호
+                      </Typography>
+
+                      <Typography variant="body1" className="fw-bold" gutterBottom>
+                        당신의 행운을 위해<br />
+                        로또메이트가 선택한 유력 번호입니다.
+                      </Typography>
+
+                      <Typography variant="body2" color="text.secondary">
+                        로또메이트 알고리즘이 분석한<br />
+                        당첨 가능성 높은 번호를 지금 확인해 보세요!
+                      </Typography>
+                      <Typography variant='body2' className='text-muted' align='center'>
+                        *예시 번호입니다.
+                      </Typography>
+
+                      <div className="lotto-balls-container mt-4">
+                        {highWinRateNumbers.map((item, index) => (
+                          <div
+                            key={index}
+                            className={`lotto-ball lotto-ball-${Math.ceil(item.number / 10)} d-inline-flex`}
+                            style={{ backgroundColor: getNumberColor(item.number) }}
+                          >
+                            {item.number}
+                          </div>
+                        ))}
+                      </div>
+
+                      <Button
+                        as={Link}
+                        to="/number-generator"
+                        variant="primary"
+                        className="mt-4"
+                        size="md"
+                      >
+                        번호 확인하기
+                      </Button>
+                    </Col>
+
+                    <Col lg={7} md={12}>
+                      <div className="chart-container">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart
+                            data={highWinRateNumbers}
+                            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            layout="vertical"
+                          >
+                            <XAxis type="number" domain={[0, 100]} />
+                            <YAxis dataKey="number" type="category" />
+                            <Tooltip content={<CustomTooltip />} />
+                            <Bar dataKey="winRate" nameKey="number" radius={[0, 8, 8, 0]}>
+                              {highWinRateNumbers.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={getNumberColor(entry.number)} />
+                              ))}
+                              <LabelList dataKey="winRate" position="right" formatter={(value) => `${value}%`} />
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </Col>
+                  </Row>
+                </Container>
+              </div>
+            </div>
+          </div> */}
           
           {/* 슬라이드 3 - 로또메이트+ 구독 */}
           <div className="slider-item">

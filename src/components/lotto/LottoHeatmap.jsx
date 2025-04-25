@@ -86,9 +86,7 @@ const LottoHeatmap = ({ startRound = 1000, endRound = 1100, onHitmapReady }) => 
       } catch (err) {
         console.error('히스토리컬 히트맵 조회 실패:', err);
 
-        // More detailed error message
         if (err.response) {
-          // The request was made and the server responded with a status code
           console.error('Server response:', err.response.data);
           console.error('Status:', err.response.status);
 
@@ -98,11 +96,9 @@ const LottoHeatmap = ({ startRound = 1000, endRound = 1100, onHitmapReady }) => 
             setError(`서버 오류 (${err.response.status}): ${err.response.data?.message || '알 수 없는 오류가 발생했습니다.'}`);
           }
         } else if (err.request) {
-          // The request was made but no response was received
           console.error('No response received:', err.request);
           setError('서버로부터 응답이 없습니다. 인터넷 연결을 확인하고 나중에 다시 시도해 주세요.');
         } else {
-          // Something happened in setting up the request
           console.error('Request error:', err.message);
           setError(`요청 오류: ${err.message}`);
         }
