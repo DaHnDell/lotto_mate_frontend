@@ -75,18 +75,36 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token, email]);
 
-  // 로그인 처리
-  const login = (userEmail, userToken, userRefreshToken) => {
+    // 로그인 처리
+  const login = (userEmail, userToken, userRefreshToken, rememberMe = false) => {
     setEmail(userEmail);
     setToken(userToken);
     setRefreshToken(userRefreshToken);
     setIsLoggedIn(true);
 
-    // localStorage에 저장
-    localStorage.setItem('token', userToken);
-    localStorage.setItem('refreshToken', userRefreshToken);
-    localStorage.setItem('email', userEmail);
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem('token', userToken);
+    storage.setItem('refreshToken', userRefreshToken);
+    storage.setItem('email', userEmail);
+    localStorage.setItem('rememberMe', rememberMe); // 기억 여부도 저장
   };
+
+  // 초기화 시 불러오기
+  useEffect(() => {
+    const remember = localStorage.getItem('rememberMe') === 'true';
+    const storage = remember ? localStorage : sessionStorage;
+
+    const savedToken = storage.getItem('token');
+    const savedEmail = storage.getItem('email');
+    const savedRefresh = storage.getItem('refreshToken');
+
+    if (savedToken && savedEmail) {
+      setToken(savedToken);
+      setEmail(savedEmail);
+      setRefreshToken(savedRefresh);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   // 로그아웃 처리
   const logout = () => {
@@ -98,7 +116,7 @@ export const AuthProvider = ({ children }) => {
     // localStorage에서 제거
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('email');
+    // localStorage.removeItem('email');
 
     // 홈으로 리다이렉트
     navigate('/');

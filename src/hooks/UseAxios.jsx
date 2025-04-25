@@ -2,13 +2,18 @@ import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://lottomateapi.eeerrorcode.com/api/';
+const BASE_URL =
+window.location.hostname === 'localhost'
+  ? 'http://localhost:8080/api/'
+  : 'https://lottomateapi.eeerrorcode.com/api/';
 
 const UseAxios = (baseUrl = BASE_URL) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const {token} = useAuth();
+
+  console.log("배포 test용 : ", BASE_URL)
 
   const req = useCallback(
     async (method, endpoint, body = null, addHeaders = {}, isMultipart = false) => {

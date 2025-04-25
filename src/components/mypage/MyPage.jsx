@@ -22,7 +22,7 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const { email } = useAuth(); // 실제 사용하는 값만 구조 분해
+  const { email, logout } = useAuth(); // 실제 사용하는 값만 구조 분해
   const navigate = useNavigate();
   
   // 사용자 정보 조회
@@ -177,7 +177,7 @@ const MyPage = () => {
   
   // 로그아웃 처리
   const handleLogout = () => {
-    // 실제 구현에서는 logout() 함수 호출
+    logout();
     alert('로그아웃 되었습니다.');
     navigate('/');
   };
