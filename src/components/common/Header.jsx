@@ -124,10 +124,10 @@ const Header = () => {
       <Container>
         {/* 왼쪽 메뉴 */}
         <Nav className="left-menu me-auto">
-          <Nav.Link 
-             href="#hero-slider-section" 
-             className={isActive('hero-slider-section') ? 'active' : ''}
-             onClick={(e) => handleNavLinkClick(e, 'hero-slider-section')}
+          <Nav.Link
+            as={Link}
+            to="/stats/chart"
+            className={isPageActive('/stats/chart') ? 'active' : ''}
           >
             당첨 소식
           </Nav.Link>
