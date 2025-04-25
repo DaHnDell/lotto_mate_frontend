@@ -311,7 +311,7 @@ const SubscriptionManagement = () => {
         onSelect={(k) => setActiveTab(k)}
         className="mb-4"
       >
-        <Tab eventKey="plans" title="구독 플랜" className='tab-name'>
+        <Tab eventKey="plans" title="구독 플랜" className='tab-name text-center'>
           <Card>
             <Card.Header className="d-flex justify-content-between align-items-center">
               <h5 className="mb-0">구독 플랜 목록</h5>
@@ -331,66 +331,80 @@ const SubscriptionManagement = () => {
                   등록된 구독 플랜이 없습니다. 새 플랜을 등록해주세요.
                 </Alert>
               ) : (
-                <Table responsive hover>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>플랜명</th>
-                      <th>가격</th>
-                      <th>기간</th>
-                      <th>저장 개수</th>
-                      <th>상태</th>
-                      <th>관리</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {plans.map(plan => (
-                      <tr key={plan.id}>
-                        <td>{plan.id}</td>
-                        <td>
-                          <strong>{plan.name}</strong>
-                          <br />
-                          <small className="text-muted">{plan.description}</small>
-                        </td>
-                        <td>{plan.price.toLocaleString()}원</td>
-                        <td>{plan.durationMonths}개월</td>
-                        <td>{plan.maxLottoNumbers.toLocaleString()}</td>
-                        <td>{renderStatusBadge(plan.active)}</td>
-                        <td>
-                          <Button 
-                            variant="outline-primary" 
-                            size="sm" 
-                            className="me-2"
-                            onClick={() => {
-                              setCurrentPlan(plan);
-                              setShowEditModal(true);
-                            }}
-                          >
-                            <PencilFill />
-                          </Button>
-                          <Button 
-                            variant="outline-danger" 
-                            size="sm" 
-                            className="me-2"
-                            onClick={() => {
-                              setCurrentPlan(plan);
-                              setShowDeleteModal(true);
-                            }}
-                          >
-                            <TrashFill />
-                          </Button>
-                          <Button 
-                            variant={plan.active ? "outline-secondary" : "outline-success"} 
-                            size="sm"
-                            onClick={() => togglePlanStatus(plan.id)}
-                          >
-                            {plan.active ? <ToggleOff /> : <ToggleOn />}
-                          </Button>
-                        </td>
+                <div className="table-responsive">
+                  <Table responsive hover>
+                    <thead>
+                      <tr>
+                        <th style={{ width: '5%' }}>ID</th>
+                        <th style={{ width: '15%' }}>플랜명</th>
+                        <th style={{ width: '40%' }}>설명</th>
+                        <th style={{ width: '10%' }}>가격</th>
+                        <th style={{ width: '8%' }}>기간</th>
+                        <th style={{ width: '8%' }}>저장 개수</th>
+                        <th style={{ width: '7%' }}>상태</th>
+                        <th style={{ width: '7%' }}>관리</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {plans.map(plan => (
+                        <tr key={plan.id}>
+                          <td>{plan.id}</td>
+                          <td>
+                            <strong>{plan.name}</strong>
+                          </td>
+                          <td>
+                            <div style={{ 
+                              maxHeight: '80px', 
+                              overflowY: 'auto', 
+                              fontSize: '0.9rem', 
+                              lineHeight: '1.3'
+                            }}
+                            className='text-start'>
+                              {plan.description || '설명 없음'}
+                            </div>
+                          </td>
+                          <td>{plan.price?.toLocaleString() || 0}원</td>
+                          <td>{plan.durationMonths || 1}개월</td>
+                          <td>{plan.maxLottoNumbers?.toLocaleString() || 0}</td>
+                          <td>{renderStatusBadge(plan.active)}</td>
+                          <td>
+                            <div className="d-flex flex-column gap-1">
+                              <Button 
+                                variant="outline-primary" 
+                                size="sm" 
+                                className="mb-1"
+                                onClick={() => {
+                                  setCurrentPlan(plan);
+                                  setShowEditModal(true);
+                                }}
+                              >
+                                <PencilFill />
+                              </Button>
+                              <Button 
+                                variant="outline-danger" 
+                                size="sm" 
+                                className="mb-1"
+                                onClick={() => {
+                                  setCurrentPlan(plan);
+                                  setShowDeleteModal(true);
+                                }}
+                              >
+                                <TrashFill />
+                              </Button>
+                              <Button 
+                                variant={plan.active ? "outline-secondary" : "outline-success"} 
+                                size="sm"
+                                onClick={() => togglePlanStatus(plan.id)}
+                              >
+                                {plan.active ? <ToggleOff /> : <ToggleOn />}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
               )}
             </Card.Body>
           </Card>
