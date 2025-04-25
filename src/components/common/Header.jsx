@@ -125,9 +125,9 @@ const Header = () => {
         {/* 왼쪽 메뉴 */}
         <Nav className="left-menu me-auto">
           <Nav.Link
-            as={Link}
-            to="/stats/chart"
-            className={isPageActive('/stats/chart') ? 'active' : ''}
+            href="#hero-slider-section"
+            className={isActive('hero-slider-section') ? 'active' : ''}
+            onClick={(e) => handleNavLinkClick(e, 'hero-slider-section')}
           >
             당첨 소식
           </Nav.Link>
