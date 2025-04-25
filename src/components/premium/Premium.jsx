@@ -51,7 +51,7 @@ const Premium = () => {
   const [billingPeriod, setBillingPeriod] = useState('monthly');
   const [isPortOneLoaded, setIsPortOneLoaded] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [user, setUser] = useState({email: '', name: '', phone: ''});
+  // const [user, setUser] = useState({email: '', name: '', phone: ''});
   const [plans, setPlans] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -167,11 +167,11 @@ const Premium = () => {
 
   // 구독하기 버튼 클릭 핸들러
   const handleSubscribe = async () => {
+    // 로컬 스토리지에서 직접 이메일 가져오기
     const email = localStorage.getItem("email");
-    setUser({email: `${email}`});
-
-    // 로그인 체크
-    if (user.email === '') {
+    
+    // 로그인 체크 - 상태 변수(user)가 아닌 직접 로컬 스토리지 값 확인
+    if (!email) {
       alert('구독을 시작하려면 로그인이 필요합니다.');
       navigate('/login', { state: { from: '/premium' } });
       return;
@@ -205,9 +205,9 @@ const Premium = () => {
         merchant_uid: merchantUid, // 주문번호
         name: `로또메이트+ ${selectedPlanData.name} ${billingPeriod === 'monthly' ? '월간' : '연간'} 구독`, // 주문명
         amount: price, // 결제금액
-        buyer_email: user.email || '', // 구매자 이메일
-        buyer_name: user.name || '', // 구매자 이름
-        buyer_tel: user.phone || '', // 구매자 전화번호
+        buyer_email: email || '', 
+        buyer_name: '', 
+        buyer_tel: '', 
         // 정기결제 설정 (월간 구독에만 적용)
         ...(billingPeriod === 'monthly' && {
           period: {
@@ -222,7 +222,9 @@ const Premium = () => {
           try {
             // 결제 검증 및 구독 정보 저장
             const subscriptionInfo = {
-              plan: selectedPlanData.id,
+              imp_uid: response.imp_uid,
+              merchant_uid: response.merchant_uid,
+              plan: selectedPlan,
               period: billingPeriod,
               amount: price
             };
