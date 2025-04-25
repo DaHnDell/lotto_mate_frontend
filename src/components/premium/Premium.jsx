@@ -80,6 +80,7 @@ const Premium = () => {
             features: plan.features ? plan.features.split(',').map(feature => feature.trim()) : [],
             notIncluded: [], // 초기화
             maxLottoNumbers: plan.maxLottoNumbers,
+            description: plan.description,
             id: plan.id
           };
         });
@@ -186,7 +187,7 @@ const Premium = () => {
       
       const { IMP } = window;
       // 가맹점 식별코드 초기화
-      IMP.init('your_imp_code'); // 포트원에서 발급받은 가맹점 식별코드
+      IMP.init('imp70056657'); // 포트원에서 발급받은 가맹점 식별코드
       
       // 결제 데이터 준비
       const selectedPlanData = plans[selectedPlan];
@@ -199,7 +200,7 @@ const Premium = () => {
       
       // 결제 요청
       IMP.request_pay({
-        pg: 'inicis', // PG사 (실제 계약한 PG사로 변경)
+        pg: 'tosspayments', // PG사 (실제 계약한 PG사로 변경)
         pay_method: 'card', // 결제 수단
         merchant_uid: merchantUid, // 주문번호
         name: `로또메이트+ ${selectedPlanData.name} ${billingPeriod === 'monthly' ? '월간' : '연간'} 구독`, // 주문명
@@ -210,8 +211,8 @@ const Premium = () => {
         // 정기결제 설정 (월간 구독에만 적용)
         ...(billingPeriod === 'monthly' && {
           period: {
-            interval: 1, // 1개월마다
-            interval_count: 1, // 1회씩
+            interval: "1", // 1개월마다
+            interval_count: "1", // 1회씩
             start_date: new Date().toISOString().split('T')[0].replace(/-/g, ''), // YYYYMMDD 형식
             end_date: '' // 무제한
           }
@@ -450,7 +451,7 @@ const Premium = () => {
                     <strong>{plans[selectedPlan].name}</strong> 플랜, {billingPeriod === 'monthly' ? '월간' : '연간'} 결제
                   </p>
                   <ul className="selected-plan-features">
-                    <li>
+                    {/* <li>
                       <CheckCircleFill className="me-2 text-success" />
                       저장 번호 {plans[selectedPlan].maxLottoNumbers === -1 ? '무제한' : plans[selectedPlan].maxLottoNumbers.toLocaleString() + '개'}
                     </li>
@@ -461,6 +462,9 @@ const Premium = () => {
                     <li>
                       <CheckCircleFill className="me-2 text-success" />
                       즉시 프리미엄 기능 이용 가능
+                    </li> */}
+                    <li>
+                      {plans[selectedPlan].description}
                     </li>
                   </ul>
                 </Col>
