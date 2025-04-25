@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080/api/';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://lottomateapi.eeerrorcode.com/api/';
 
 const UseAxios = (baseUrl = BASE_URL) => {
   const [data, setData] = useState(null);
