@@ -14,6 +14,7 @@ import LoginPage from './components/user/LoginPage';
 import SignupPage from './components/user/SignupPage';
 import NotFoundPage from './components/common/NotFoundPage';
 import OAuth2CallbackHandler from './components/auth/OAuth2CallbackHandler';
+import LottoChartPage from './components/lotto/LottoChartPage';
 
 function App() {
   return (
@@ -24,11 +25,15 @@ function App() {
           <Route path="/premium" element={<Premium />} />
           <Route path='/mypage' element={<MyPage />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
+
+          {/* Chart 페이지 */}
+          <Route path='/stats/chart' element={<LottoChartPage />} /> 
           
           {/* 로그인 라우트 */}
           <Route path="/login/*" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/oauth/callback" element={<OAuth2CallbackHandler />} />
+          
 
           {/* 결제 관련 라우트 */}
           <Route path="/subscription/complete" element={<SubscriptionComplete />} />
