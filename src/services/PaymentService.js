@@ -6,22 +6,27 @@ const PaymentService = () => {
   /**
    * 결제 검증 및 구독 정보 저장
    * @param {Object} paymentData - 포트원에서 받은 결제 데이터
-   * @param {string} paymentData.imp_uid - 포트원 결제 고유번호
-   * @param {string} paymentData.merchant_uid - 주문번호
+   * @param {string} paymentData.impUid - 포트원 결제 고유번호
+   * @param {string} paymentData.merchantUid - 주문번호
    * @param {Object} subscriptionInfo - 구독 정보
    * @returns {Promise} - API 응답
    */
   const verifyPaymentAndCreateSubscription = async (paymentData, subscriptionInfo) => {
     try {
       const body = {
-        imp_uid: paymentData.imp_uid,
-        merchant_uid: paymentData.merchant_uid,
+        impUid: paymentData.impUid,
+        merchantUid: paymentData.merchantUid,
         plan: subscriptionInfo.plan,
         period: subscriptionInfo.period,
         amount: subscriptionInfo.amount
       };
       
-      return await req('POST', 'subscription/verify-payment', body);
+      // Authorization 헤더 추가
+      const headers = {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      };
+
+      return await req('POST', 'subscription/verify-payment', body, headers);
     } catch (err) {
       console.error('결제 검증 중 오류 발생:', err);
       throw err;
