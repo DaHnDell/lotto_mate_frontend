@@ -204,7 +204,7 @@ const Premium = () => {
         pay_method: 'card', // 결제 수단
         merchant_uid: merchantUid, // 주문번호
         name: `로또메이트+ ${selectedPlanData.name} ${billingPeriod === 'monthly' ? '월간' : '연간'} 구독`, // 주문명
-        amount: price, // 결제금액
+        amount: price.toString(), // 문자열로 변환, // 결제금액
         buyer_email: email || '', 
         buyer_name: '', 
         buyer_tel: '', 
@@ -218,37 +218,47 @@ const Premium = () => {
           }
         })
       }, async function(response) {
-        if (response.success) {
+        console.log(response);
+
+        if (response.imp_uid) {
           try {
             // 결제 검증 및 구독 정보 저장
             const subscriptionInfo = {
-              imp_uid: response.imp_uid,
-              merchant_uid: response.merchant_uid,
+              impUid: response.imp_uid,
+              merchantUid: response.merchant_uid,
               plan: selectedPlan,
               period: billingPeriod,
               amount: price
             };
             
-            const result = await paymentService.verifyPaymentAndCreateSubscription(
-              { imp_uid: response.imp_uid, merchant_uid: response.merchant_uid },
+            await paymentService.verifyPaymentAndCreateSubscription(
+              { impUid: response.imp_uid, merchantUid: response.merchant_uid },
               subscriptionInfo
-            );
-            
-            // 구독 완료 페이지로 이동
-            navigate('/subscription/complete', { 
-              state: { 
-                impUid: response.imp_uid,
-                subscriptionId: result.subscriptionId 
-              } 
+            ).then(result => {
+              // 성공 처리
+              navigate('/subscription/complete', { 
+                state: { 
+                  impUid: response.imp_uid,
+                  subscriptionId: result.subscriptionId 
+                } 
+              });
+            }).catch(error => {
+              console.error('결제 검증 실패:', error);
+              alert('결제 검증에 실패했습니다. 고객센터에 문의해주세요.');
             });
           } catch (error) {
-            console.error('결제 검증 실패:', error);
-            alert('결제는 성공했으나 서버에서 검증에 실패했습니다. 고객센터에 문의해주세요.');
+            console.error('결제 처리 오류:', error);
+            alert('결제 처리 중 오류가 발생했습니다.');
           }
+        } else if (response.success === false) {
+          // 명시적인 실패 케이스
+          console.error('결제 실패:', response.error_msg);
+          alert(`결제 실패: ${response.error_msg}`);
         } else {
-          // 결제 실패 시 처리
-          console.error('결제 실패', response);
-          alert(`결제에 실패했습니다: ${response.error_msg}`);
+          // imp_uid가 없으면 결제 요청 자체가 실패한 것
+          // success 필드가 없는 경우 (비정상 케이스)
+          console.error('결제 응답 형식 오류:', response);
+          alert('결제 처리 중 오류가 발생했습니다.');
         }
       });
     } catch (error) {
