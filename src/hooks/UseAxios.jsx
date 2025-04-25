@@ -13,8 +13,6 @@ const UseAxios = (baseUrl = BASE_URL) => {
   const [error, setError] = useState(null);
   const {token} = useAuth();
 
-  console.log("배포 test용 : ", BASE_URL)
-
   const req = useCallback(
     async (method, endpoint, body = null, addHeaders = {}, isMultipart = false) => {
       setLoading(true);

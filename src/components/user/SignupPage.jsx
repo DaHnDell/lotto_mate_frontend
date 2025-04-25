@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import UseAxios from '../../hooks/UseAxios';
 import { Eye, EyeSlash, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import '../../resources/css/login.css';
-// import logo from '../../resources/img/logo3.png'; // 이 줄을 아래 줄로 변경
-const logo = `${process.env.PUBLIC_URL}/resources/img/logo3.png`;
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -267,7 +265,7 @@ const SignupPage = () => {
         <div className="login-left-panel">
           <div className="login-brand">
             <Link to="/">
-              <img src={logo} alt="로또메이트" className="login-logo" />
+              <img src={`${process.env.PUBLIC_URL}/logo3.png`} alt="로또메이트" className="login-logo" />
             </Link>
           </div>
           <div className="login-welcome-text">
