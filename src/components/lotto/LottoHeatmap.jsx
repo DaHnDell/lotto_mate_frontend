@@ -20,7 +20,7 @@ ChartJS.register(
   Title
 );
 
-const LottoHeatmap = ({ startRound = 1000, endRound = 1100 }) => {
+const LottoHeatmap = ({ startRound = 1000, endRound = 1100, onHitmapReady }) => {
   const { req } = useAxios();
   const [matrixData, setMatrixData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -80,6 +80,9 @@ const LottoHeatmap = ({ startRound = 1000, endRound = 1100 }) => {
 
         setMatrixData(transformed);
         setRetryCount(0); // Reset retry count on success
+        if (onHitmapReady) {
+          onHitmapReady(hitmap);
+        }
       } catch (err) {
         console.error('히스토리컬 히트맵 조회 실패:', err);
 
@@ -109,7 +112,7 @@ const LottoHeatmap = ({ startRound = 1000, endRound = 1100 }) => {
     };
 
     fetchHistoryHeatmap();
-  }, [req, startRound, endRound, retryCount]);
+  }, [req, startRound, endRound, retryCount, onHitmapReady]);
 
   const handleRetry = () => {
     setRetryCount(prev => prev + 1);
@@ -182,30 +185,27 @@ const LottoHeatmap = ({ startRound = 1000, endRound = 1100 }) => {
       legend: {
         display: true,
         position: 'top',
+        onClick: null,
         labels: {
-          generateLabels: (chart) => [
+          generateLabels: () => [
             {
               text: '출현',
               fillStyle: '#1e88e5',
               strokeStyle: '#1e88e5',
               lineWidth: 1,
-              hidden: false,
-              index: 0,
             },
             {
               text: '미출현',
               fillStyle: '#e0e0e0',
               strokeStyle: '#e0e0e0',
               lineWidth: 1,
-              hidden: false,
-              index: 1,
             },
-          ]
+          ],
         }
       },
       title: {
         display: true,
-        text: `로또 번호 히트맵 (${startRound}회차 ~ ${endRound}회차)`,
+        text: `히트맵 번호 분포도`,
         font: {
           size: 16,
           weight: 'bold',
