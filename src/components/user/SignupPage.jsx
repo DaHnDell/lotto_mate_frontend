@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import UseAxios from '../../hooks/UseAxios';
 import { Eye, EyeSlash, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
+import axios from 'axios';
 import '../../resources/css/login.css';
+
+// API 기본 URL 설정
+const BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:8080/api/'
+    : 'https://lottomateapi.eeerrorcode.com/api/';
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -16,9 +23,6 @@ const SignupPage = () => {
     confirmPassword: '',
     termsAgreed: false
   });
-  
-  // UseAxios hook 가져오기 
-  const { req, loading } = UseAxios();
   
   // 비밀번호 검증 상태
   const [passwordValidation, setPasswordValidation] = useState({
@@ -132,24 +136,28 @@ const SignupPage = () => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
+    setLoading(true);
     
     const { email, name, password, confirmPassword, termsAgreed } = formData;
     
     // 필수 입력 확인
     if (!email || !name || !password) {
       setErrorMsg('모든 필수 항목을 입력해주세요.');
+      setLoading(false);
       return;
     }
     
     // 비밀번호 확인
     if (password !== confirmPassword) {
       setErrorMsg('비밀번호가 일치하지 않습니다.');
+      setLoading(false);
       return;
     }
     
     // 약관 동의 확인
     if (!termsAgreed) {
       setErrorMsg('서비스 이용약관에 동의해주세요.');
+      setLoading(false);
       return;
     }
     
@@ -157,20 +165,30 @@ const SignupPage = () => {
     const isPasswordValid = Object.values(passwordValidation).every(value => value);
     if (!isPasswordValid) {
       setErrorMsg('비밀번호 요구사항을 모두 충족해주세요.');
+      setLoading(false);
       return;
     }
     
     try {
-      // UseAxios hook을 사용하여 회원가입 API 호출
-      const response = await req('POST', 'auth/signup', { email, name, password });
-      console.log("회원가입 응답:", response);
-      // CommonResponse 형식에 맞게 응답 처리
-      if (response && response.message && !response.error) {
+      // 회원가입 API 호출
+      const response = await axios.post(`${BASE_URL}auth/signup`, 
+        { email, name, password },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      // 응답 처리
+      if (response.data && !response.data.error) {
         setSuccessMsg('회원가입이 완료되었습니다! 잠시 후 로그인 페이지로 이동합니다.');
         
-        // 알림창 표시
-        alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
-        navigate('/login');
+        // 알림창 표시 및 리다이렉트
+        setTimeout(() => {
+          alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
+          navigate('/login');
+        }, 1500);
       }
     } catch (error) {
       console.error('회원가입 오류:', error);
@@ -179,7 +197,7 @@ const SignupPage = () => {
       if (error.response?.data) {
         const errorData = error.response.data;
         
-        // CommonResponse 형식의 오류 메시지 처리
+        // 오류 메시지 처리
         if (errorData.message) {
           setErrorMsg(errorData.message);
         } else if (errorData.code === 'REGISTRATION_ERROR') {
@@ -190,6 +208,8 @@ const SignupPage = () => {
       } else {
         setErrorMsg('회원가입에 실패했습니다. 다시 시도해주세요.');
       }
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -198,11 +218,11 @@ const SignupPage = () => {
     if (!email || !isValidEmail(email)) return;
     
     try {
-      const response = await req('GET', `user/check-email?email=${encodeURIComponent(email)}`);
+      const response = await axios.get(`${BASE_URL}user/check-email?email=${encodeURIComponent(email)}`);
       
-      // CommonResponse 형식에 맞게 응답 처리
-      if (response && response.code === 'success' && response.data) {
-        if (response.data.duplicated) {
+      // 응답 처리
+      if (response.data && response.data.code === 'success' && response.data.data) {
+        if (response.data.data.duplicated) {
           setErrorMsg('이미 등록된 이메일입니다.');
           return true; // 중복됨
         }
@@ -289,6 +309,10 @@ const SignupPage = () => {
               <div className="login-success-message">{successMsg}</div>
             )}
             
+            {errorMsg && (
+              <div className="login-error-message">{errorMsg}</div>
+            )}
+            
             <form onSubmit={handleSignup} className="login-form">
               <div className="login-form-group">
                 <label htmlFor="email" className="login-label">Email address *</label>
@@ -303,9 +327,6 @@ const SignupPage = () => {
                   className="login-input"
                   required 
                 />
-                {errorMsg && (
-                  <div className="login-error-message">{errorMsg}</div>
-                )}
               </div>
               
               <div className="login-form-group">

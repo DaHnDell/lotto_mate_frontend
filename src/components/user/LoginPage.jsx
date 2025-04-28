@@ -1,33 +1,49 @@
-import React, { useState,useEffect  } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
-import UseAxios from '../../hooks/UseAxios';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import axios from 'axios';
 import '../../resources/css/login.css';
+
+// API 기본 URL 설정
+const BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:8080/api/'
+    : 'https://lottomateapi.eeerrorcode.com/api/';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  
+  // 쿼리 파라미터 확인
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const error = queryParams.get('error');
+  
   useEffect(() => {
+    // URL에 에러 파라미터가 있으면 에러 메시지 표시
+    if (error === 'auth_failed') {
+      setErrorMsg('인증에 실패했습니다. 다시 시도해주세요.');
+    }
+    
+    // 저장된 이메일 정보 로드
     const remembered = localStorage.getItem('rememberMe');
     const savedEmail = localStorage.getItem('email');
-    const savedPassword = localStorage.getItem('password');
     
-    if (remembered === 'true') {
+    if (remembered === 'true' && savedEmail) {
       setRememberMe(true);
-      setFormData({
-        email: savedEmail || '',
-        password: savedPassword || ''
-      });
-    } 
-  }, []);
-  // UseAxios hook 가져오기
-  const { req, loading } = UseAxios();
+      setFormData(prev => ({
+        ...prev,
+        email: savedEmail || ''
+      }));
+    }
+  }, [error]);
   
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -45,25 +61,45 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setLoading(true);
     
     const { email, password } = formData;
     
     if (!email || !password) {
       setErrorMsg('이메일과 비밀번호를 모두 입력해주세요.');
+      setLoading(false);
       return;
     }
     
     try {
-      // UseAxios hook을 사용하여 로그인 API 호출
-      const response = await req('POST', 'auth/login', { email, password });
+      // 통합 로그인 API 호출 (이메일/비밀번호 방식)
+      const requestBody = {
+        loginType: "EMAIL_PASSWORD",
+        email: email,
+        password: password,
+        deviceInfo: navigator.userAgent
+      };
       
-      if (response && response.data) {
+      const response = await axios.post(`${BASE_URL}auth/unified-login`, requestBody, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.data && response.data.data) {
         // 로그인 성공 처리
-        const { accessToken, refreshToken } = response.data;
+        const { accessToken, refreshToken } = response.data.data;
+
+        // 이메일 정보와 로그인 상태 저장 (rememberMe 설정에 따라)
+        if (rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        } else {
+          localStorage.removeItem('rememberMe');
+        }
         
-        // AuthContext를 통해 로그인 상태 업데이트
+        // AuthContext를 통한 로그인 상태 업데이트
         login(email, accessToken, refreshToken, rememberMe);
-        
+
         // 홈 페이지로 이동
         navigate('/');
       } else {
@@ -75,6 +111,8 @@ const LoginPage = () => {
       // 서버에서 전달받은 오류 메시지가 있으면 사용, 없으면 기본 메시지 표시
       const errorMessage = error.response?.data?.message || '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.';
       setErrorMsg(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
   
