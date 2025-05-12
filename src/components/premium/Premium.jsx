@@ -185,6 +185,10 @@ const Premium = () => {
     try {
       setIsProcessingPayment(true);
       
+      // 포트원 결제 요청 전 서버에서 직접 토큰 발급 (클라이언트에서는 발급하지 않음)
+      // 서버 측에서 결제 검증 시 토큰을 직접 생성하므로 여기서 토큰을 미리 발급할 필요가 없음
+      console.log("결제 과정 시작");
+      
       const { IMP } = window;
       // 가맹점 식별코드 초기화
       IMP.init('imp70056657'); // 포트원에서 발급받은 가맹점 식별코드
@@ -218,28 +222,38 @@ const Premium = () => {
           }
         })
       }, async function(response) {
-        console.log(response);
+        console.log("포트원 결제 응답:", response);
 
         if (response.imp_uid) {
           try {
-            // 결제 검증 및 구독 정보 저장
+            // 결제 검증 및 구독 정보 저장 
             const subscriptionInfo = {
               impUid: response.imp_uid,
               merchantUid: response.merchant_uid,
               plan: selectedPlan,
               period: billingPeriod,
-              amount: price
+              amount: price,
+              userEmail: email  // 사용자 이메일 추가
             };
+            
+            // 서버에 검증 요청 시 토큰 헤더를 추가하지 않음 (서버에서 직접 생성)
+            const headers = {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            };
+            
+            console.log("서버로 결제 검증 요청 전송:", subscriptionInfo);
             
             await paymentService.verifyPaymentAndCreateSubscription(
               { impUid: response.imp_uid, merchantUid: response.merchant_uid },
-              subscriptionInfo
+              subscriptionInfo,
+              headers
             ).then(result => {
               // 성공 처리
+              console.log("결제 검증 성공:", result);
               navigate('/subscription/complete', { 
                 state: { 
                   impUid: response.imp_uid,
-                  subscriptionId: result.subscriptionId 
+                  subscriptionId: result 
                 } 
               });
             }).catch(error => {
@@ -249,22 +263,25 @@ const Premium = () => {
           } catch (error) {
             console.error('결제 처리 오류:', error);
             alert('결제 처리 중 오류가 발생했습니다.');
+          } finally {
+            setIsProcessingPayment(false);
           }
         } else if (response.success === false) {
           // 명시적인 실패 케이스
           console.error('결제 실패:', response.error_msg);
           alert(`결제 실패: ${response.error_msg}`);
+          setIsProcessingPayment(false);
         } else {
           // imp_uid가 없으면 결제 요청 자체가 실패한 것
           // success 필드가 없는 경우 (비정상 케이스)
           console.error('결제 응답 형식 오류:', response);
           alert('결제 처리 중 오류가 발생했습니다.');
+          setIsProcessingPayment(false);
         }
       });
     } catch (error) {
       console.error('결제 프로세스 오류:', error);
       alert('결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
       setIsProcessingPayment(false);
     }
   };

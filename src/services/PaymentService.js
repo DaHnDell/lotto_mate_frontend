@@ -2,6 +2,27 @@ import UseAxios from '../hooks/UseAxios';
 
 const PaymentService = () => {
   const { req, loading, error } = UseAxios();
+
+  /**
+   * 포트원 액세스 토큰 발급
+   * @returns {Promise<string>} - 포트원 액세스 토큰
+   */
+  const getPortOneAccessToken = async () => {
+    try {
+      // 포트원 인증 토큰 요청 
+      // 실제 환경에서는 서버에서 처리해야 하지만, 클라이언트 예시로 구현
+      const response = await req('POST', 'payment/portone-token', {});
+      
+      if (response && response.access_token) {
+        return response.access_token;
+      } else {
+        throw new Error('토큰 발급 실패: 응답에 액세스 토큰이 없습니다.');
+      }
+    } catch (err) {
+      console.error('포트원 액세스 토큰 발급 오류:', err);
+      throw new Error('포트원 인증 토큰 발급에 실패했습니다.');
+    }
+  };
   
   /**
    * 결제 검증 및 구독 정보 저장
@@ -9,23 +30,32 @@ const PaymentService = () => {
    * @param {string} paymentData.impUid - 포트원 결제 고유번호
    * @param {string} paymentData.merchantUid - 주문번호
    * @param {Object} subscriptionInfo - 구독 정보
+   * @param {Object} customHeaders - 추가 헤더 (선택사항)
    * @returns {Promise} - API 응답
    */
-  const verifyPaymentAndCreateSubscription = async (paymentData, subscriptionInfo) => {
+  const verifyPaymentAndCreateSubscription = async (paymentData, subscriptionInfo, customHeaders = {}) => {
     try {
       const body = {
         impUid: paymentData.impUid,
         merchantUid: paymentData.merchantUid,
         plan: subscriptionInfo.plan,
         period: subscriptionInfo.period,
-        amount: subscriptionInfo.amount
+        amount: subscriptionInfo.amount,
+        userEmail: subscriptionInfo.userEmail // 사용자 이메일 포함
       };
       
-      // Authorization 헤더 추가
-      const headers = {
+      // 기본 인증 헤더
+      const defaultHeaders = {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       };
+      
+      // 기본 헤더와 사용자 정의 헤더 병합
+      const headers = {
+        ...defaultHeaders,
+        ...customHeaders
+      };
 
+      // 서버에 검증 요청
       return await req('POST', 'subscription/verify-payment', body, headers);
     } catch (err) {
       console.error('결제 검증 중 오류 발생:', err);
@@ -49,11 +79,32 @@ const PaymentService = () => {
   /**
    * 결제 완료 후 구독 정보 상세 조회
    * @param {string} imp_uid - 포트원 결제 고유번호
+   * @param {string} email - 사용자 이메일 (선택사항)
    * @returns {Promise} - 구독 상세 정보
    */
-  const getSubscriptionDetails = async (imp_uid) => {
+  const getSubscriptionDetails = async (imp_uid, email = null) => {
     try {
-      return await req('GET', `subscription/details?imp_uid=${imp_uid}`);
+      // 기본 URL 생성
+      let url = `subscription/details?imp_uid=${imp_uid}`;
+      
+      // 이메일이 제공된 경우 URL에 추가
+      if (email) {
+        url += `&email=${encodeURIComponent(email)}`;
+      }
+      
+      // 로그 추가
+      console.log('구독 상세 정보 요청 URL:', url);
+      
+      // 기본 인증 헤더
+      const headers = {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      };
+      
+      // 요청 및 응답 처리
+      const response = await req('GET', url, null, headers);
+      console.log('구독 상세 정보 응답:', response);
+      
+      return response;
     } catch (err) {
       console.error('구독 상세 정보 조회 중 오류 발생:', err);
       throw err;
@@ -318,6 +369,7 @@ const PaymentService = () => {
   };
   
   return {
+    getPortOneAccessToken,
     verifyPaymentAndCreateSubscription,
     getSubscriptionInfo,
     getSubscriptionDetails,
