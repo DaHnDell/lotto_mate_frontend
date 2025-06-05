@@ -1,399 +1,425 @@
+import { createContext, useContext, useEffect, useState } from 'react';
 import UseAxios from '../hooks/UseAxios';
 
-const PaymentService = () => {
-  const { req, loading, error } = UseAxios();
+// PaymentService Context 생성
+const PaymentServiceContext = createContext(null);
 
-  /**
-   * 포트원 액세스 토큰 발급
-   * @returns {Promise<string>} - 포트원 액세스 토큰
-   */
-  const getPortOneAccessToken = async () => {
-    try {
-      // 포트원 인증 토큰 요청 
-      // 실제 환경에서는 서버에서 처리해야 하지만, 클라이언트 예시로 구현
-      const response = await req('POST', 'payment/portone-token', {});
-      
-      if (response && response.access_token) {
-        return response.access_token;
-      } else {
-        throw new Error('토큰 발급 실패: 응답에 액세스 토큰이 없습니다.');
-      }
-    } catch (err) {
-      console.error('포트원 액세스 토큰 발급 오류:', err);
-      throw new Error('포트원 인증 토큰 발급에 실패했습니다.');
+// PaymentService 클래스
+class PaymentServiceClass {
+  constructor() {
+    if (PaymentServiceClass.instance) {
+      return PaymentServiceClass.instance;
     }
-  };
+    
+    this.axiosInstance = null;
+    this.initialized = false;
+    this.initializationPromise = null;
+    this.listeners = new Set();
+    
+    PaymentServiceClass.instance = this;
+  }
+  
+  // 토큰 가져오기 헬퍼 메서드
+  getAuthToken() {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
+  }
+  
+  // 인증 헤더 생성
+  getAuthHeaders(additionalHeaders = {}) {
+    const token = this.getAuthToken();
+    
+    if (!token) {
+      console.warn('인증 토큰이 없습니다. 로그인이 필요할 수 있습니다.');
+    }
+    
+    return {
+      'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` }),
+      ...additionalHeaders
+    };
+  }
+  
+  // 로그인 상태 확인
+  isLoggedIn() {
+    return !!this.getAuthToken();
+  }
+  
+  // 비동기 초기화 (Promise 기반)
+  async initialize(axiosInstance) {
+    if (this.initialized) {
+      return Promise.resolve();
+    }
+    
+    if (this.initializationPromise) {
+      return this.initializationPromise;
+    }
+    
+    this.initializationPromise = new Promise((resolve) => {
+      this.axiosInstance = axiosInstance;
+      this.initialized = true;
+      
+      // 모든 리스너에게 초기화 완료 알림
+      this.listeners.forEach(listener => listener());
+      this.listeners.clear();
+      
+      resolve();
+    });
+    
+    return this.initializationPromise;
+  }
+  
+  // 초기화 대기 메서드
+  waitForInitialization() {
+    if (this.initialized) {
+      return Promise.resolve();
+    }
+    
+    return new Promise((resolve) => {
+      this.listeners.add(resolve);
+    });
+  }
+  
+  // 안전한 메서드 실행 래퍼
+  async safeExecute(methodName, method) {
+    try {
+      await this.waitForInitialization();
+      
+      // 로그인 필요한 메서드인지 확인
+      const requiresAuth = ![
+        'getSubscriptionPlans', 
+        'getSubscriptionPlanByName'
+      ].includes(methodName);
+      
+      if (requiresAuth && !this.isLoggedIn()) {
+        throw new Error('로그인이 필요합니다. 로그인 후 다시 시도해주세요.');
+      }
+      
+      return await method();
+    } catch (error) {
+      console.error(`PaymentService.${methodName} 실행 오류:`, error);
+      
+      // 인증 관련 에러 처리
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        // 토큰 만료 또는 인증 실패 시 로그아웃 처리
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
+        
+        throw new Error('인증이 만료되었습니다. 다시 로그인해주세요.');
+      }
+      
+      // 400 에러의 경우 서버 메시지 그대로 전달
+      if (error.response?.status === 400 && error.response?.data) {
+        throw new Error(error.response.data);
+      }
+      
+      throw error;
+    }
+  }
   
   /**
    * 결제 검증 및 구독 정보 저장
-   * @param {Object} paymentData - 포트원에서 받은 결제 데이터
-   * @param {string} paymentData.impUid - 포트원 결제 고유번호
-   * @param {string} paymentData.merchantUid - 주문번호
-   * @param {Object} subscriptionInfo - 구독 정보
-   * @param {Object} customHeaders - 추가 헤더 (선택사항)
-   * @returns {Promise} - API 응답
    */
-  const verifyPaymentAndCreateSubscription = async (paymentData, subscriptionInfo, customHeaders = {}) => {
-    try {
+  async verifyPaymentAndCreateSubscription(paymentData, subscriptionInfo) {
+    const email = localStorage.getItem('email');
+
+    if (!email) {
+      throw new Error('사용자 이메일 정보가 없습니다. 다시 로그인해주세요.');
+    }
+
+    return this.safeExecute('verifyPaymentAndCreateSubscription', async () => {
       const body = {
         impUid: paymentData.impUid,
         merchantUid: paymentData.merchantUid,
         plan: subscriptionInfo.plan,
         period: subscriptionInfo.period,
         amount: subscriptionInfo.amount,
-        userEmail: subscriptionInfo.userEmail // 사용자 이메일 포함
+        userEmail: email
       };
       
-      // 기본 인증 헤더
-      const defaultHeaders = {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      };
+      const headers = this.getAuthHeaders();
+      console.log('결제 검증 요청:', { body, headers }); // 디버깅용
       
-      // 기본 헤더와 사용자 정의 헤더 병합
-      const headers = {
-        ...defaultHeaders,
-        ...customHeaders
-      };
-
-      // 서버에 검증 요청
-      return await req('POST', 'subscription/verify-payment', body, headers);
-    } catch (err) {
-      console.error('결제 검증 중 오류 발생:', err);
-      throw err;
-    }
-  };
+      const result = await this.axiosInstance.req('POST', 'subscription/verify-payment', body, headers);
+      console.log('결제 검증 API 응답:', result);
+      return result;
+    });
+  }
   
   /**
    * 구독 정보 조회
-   * @returns {Promise} - 사용자의 구독 정보
    */
-  const getSubscriptionInfo = async () => {
-    try {
-      return await req('GET', 'subscription/info');
-    } catch (err) {
-      console.error('구독 정보 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getSubscriptionInfo() {
+    return this.safeExecute('getSubscriptionInfo', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', 'subscription/info', null, headers);
+    });
+  }
   
   /**
    * 결제 완료 후 구독 정보 상세 조회
-   * @param {string} imp_uid - 포트원 결제 고유번호
-   * @param {string} email - 사용자 이메일 (선택사항)
-   * @returns {Promise} - 구독 상세 정보
    */
-  const getSubscriptionDetails = async (imp_uid, email = null) => {
-    try {
-      // 기본 URL 생성
-      let url = `subscription/details?imp_uid=${imp_uid}`;
-      
-      // 이메일이 제공된 경우 URL에 추가
-      if (email) {
-        url += `&email=${encodeURIComponent(email)}`;
-      }
-      
-      // 로그 추가
-      console.log('구독 상세 정보 요청 URL:', url);
-      
-      // 기본 인증 헤더
-      const headers = {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      };
-      
-      // 요청 및 응답 처리
-      const response = await req('GET', url, null, headers);
-      console.log('구독 상세 정보 응답:', response);
-      
-      return response;
-    } catch (err) {
-      console.error('구독 상세 정보 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getSubscriptionDetails(imp_uid) {
+    return this.safeExecute('getSubscriptionDetails', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', `subscription/details?imp_uid=${imp_uid}`, null, headers);
+    });
+  }
   
   /**
    * 구독 취소
-   * @param {string} subscriptionId - 구독 ID
-   * @param {string} reason - 취소 사유
-   * @returns {Promise} - API 응답
    */
-  const cancelSubscription = async (subscriptionId, reason) => {
-    try {
+  async cancelSubscription(subscriptionId, reason) {
+    return this.safeExecute('cancelSubscription', async () => {
       const body = {
         subscription_id: subscriptionId,
         reason: reason
       };
       
-      return await req('POST', 'subscription/cancel', body);
-    } catch (err) {
-      console.error('구독 취소 중 오류 발생:', err);
-      throw err;
-    }
-  };
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('POST', 'subscription/cancel', body, headers);
+    });
+  }
   
   /**
    * 결제 영수증 조회
-   * @param {string} imp_uid - 포트원 결제 고유번호
-   * @returns {Promise} - 영수증 정보
    */
-  const getPaymentReceipt = async (imp_uid) => {
-    try {
-      return await req('GET', `payment/receipt?imp_uid=${imp_uid}`);
-    } catch (err) {
-      console.error('결제 영수증 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getPaymentReceipt(imp_uid) {
+    return this.safeExecute('getPaymentReceipt', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', `payment/receipt?imp_uid=${imp_uid}`, null, headers);
+    });
+  }
 
   /**
    * 결제 수단 등록
-   * @param {Object} paymentMethodData - 결제 수단 데이터
-   * @returns {Promise} - API 응답
    */
-  const registerPaymentMethod = async (paymentMethodData) => {
-    try {
-      return await req('POST', 'payment/methods', paymentMethodData);
-    } catch (err) {
-      console.error('결제 수단 등록 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async registerPaymentMethod(paymentMethodData) {
+    return this.safeExecute('registerPaymentMethod', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('POST', 'payment/methods', paymentMethodData, headers);
+    });
+  }
 
   /**
    * 결제 수단 목록 조회
-   * @returns {Promise} - 결제 수단 목록
    */
-  const getPaymentMethods = async () => {
-    try {
-      return await req('GET', 'payment/methods');
-    } catch (err) {
-      console.error('결제 수단 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getPaymentMethods() {
+    return this.safeExecute('getPaymentMethods', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', 'payment/methods', null, headers);
+    });
+  }
 
   /**
    * 결제 수단 삭제
-   * @param {number} paymentMethodId - 결제 수단 ID
-   * @returns {Promise} - API 응답
    */
-  const deletePaymentMethod = async (paymentMethodId) => {
-    try {
-      return await req('DELETE', `payment/methods/${paymentMethodId}`);
-    } catch (err) {
-      console.error('결제 수단 삭제 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async deletePaymentMethod(paymentMethodId) {
+    return this.safeExecute('deletePaymentMethod', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('DELETE', `payment/methods/${paymentMethodId}`, null, headers);
+    });
+  }
 
   /**
    * 자동 갱신 설정 변경
-   * @param {number} subscriptionId - 구독 ID
-   * @param {boolean} autoRenewal - 자동 갱신 여부
-   * @returns {Promise} - API 응답
    */
-  const updateAutoRenewal = async (subscriptionId, autoRenewal) => {
-    try {
-      return await req('PUT', `subscription/${subscriptionId}/auto-renewal?autoRenewal=${autoRenewal}`);
-    } catch (err) {
-      console.error('자동 갱신 설정 변경 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async updateAutoRenewal(subscriptionId, autoRenewal) {
+    return this.safeExecute('updateAutoRenewal', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('PUT', `subscription/${subscriptionId}/auto-renewal?autoRenewal=${autoRenewal}`, null, headers);
+    });
+  }
 
   /**
    * 플랜 변경
-   * @param {number} subscriptionId - 구독 ID
-   * @param {string} planName - 변경할 플랜 이름 (basic, standard, premium)
-   * @returns {Promise} - API 응답
    */
-  const changePlan = async (subscriptionId, planName) => {
-    try {
-      return await req('PUT', `subscription/${subscriptionId}/plan?planName=${planName}`);
-    } catch (err) {
-      console.error('플랜 변경 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async changePlan(subscriptionId, planName) {
+    return this.safeExecute('changePlan', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('PUT', `subscription/${subscriptionId}/plan?planName=${planName}`, null, headers);
+    });
+  }
 
   /**
    * 결제 수단 변경
-   * @param {number} subscriptionId - 구독 ID
-   * @param {number} paymentMethodId - 결제 수단 ID
-   * @returns {Promise} - API 응답
    */
-  const changePaymentMethod = async (subscriptionId, paymentMethodId) => {
-    try {
-      return await req('PUT', `subscription/${subscriptionId}/payment-method?paymentMethodId=${paymentMethodId}`);
-    } catch (err) {
-      console.error('결제 수단 변경 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async changePaymentMethod(subscriptionId, paymentMethodId) {
+    return this.safeExecute('changePaymentMethod', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('PUT', `subscription/${subscriptionId}/payment-method?paymentMethodId=${paymentMethodId}`, null, headers);
+    });
+  }
 
   /**
    * 구독 생성
-   * @param {Object} subscriptionData - 구독 생성 데이터
-   * @returns {Promise} - API 응답
    */
-  const createSubscription = async (subscriptionData) => {
-    try {
-      return await req('POST', 'subscription', subscriptionData);
-    } catch (err) {
-      console.error('구독 생성 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async createSubscription(subscriptionData) {
+    return this.safeExecute('createSubscription', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('POST', 'subscription', subscriptionData, headers);
+    });
+  }
 
   /**
    * 구독 취소 이력 생성
-   * @param {Object} cancellationData - 취소 이력 데이터
-   * @returns {Promise} - API 응답
    */
-  const createCancellation = async (cancellationData) => {
-    try {
-      return await req('POST', 'subscription/cancellation', cancellationData);
-    } catch (err) {
-      console.error('구독 취소 이력 생성 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async createCancellation(cancellationData) {
+    return this.safeExecute('createCancellation', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('POST', 'subscription/cancellation', cancellationData, headers);
+    });
+  }
 
   /**
    * 구독 취소 이력 목록 조회
-   * @returns {Promise} - 취소 이력 목록
    */
-  const getCancellationHistory = async () => {
-    try {
-      return await req('GET', 'subscription/cancellation');
-    } catch (err) {
-      console.error('구독 취소 이력 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getCancellationHistory() {
+    return this.safeExecute('getCancellationHistory', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', 'subscription/cancellation', null, headers);
+    });
+  }
 
   /**
    * 구독 취소 이력 상세 조회
-   * @param {number} cancellationId - 취소 이력 ID
-   * @returns {Promise} - 취소 이력 상세 정보
    */
-  const getCancellationDetail = async (cancellationId) => {
-    try {
-      return await req('GET', `subscription/cancellation/${cancellationId}`);
-    } catch (err) {
-      console.error('구독 취소 이력 상세 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getCancellationDetail(cancellationId) {
+    return this.safeExecute('getCancellationDetail', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', `subscription/cancellation/${cancellationId}`, null, headers);
+    });
+  }
 
   /**
    * 결제 정보 조회
-   * @param {number} paymentId - 결제 ID
-   * @returns {Promise} - 결제 정보
    */
-  const getPaymentInfo = async (paymentId) => {
-    try {
-      return await req('GET', `payment/${paymentId}`);
-    } catch (err) {
-      console.error('결제 정보 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getPaymentInfo(paymentId) {
+    return this.safeExecute('getPaymentInfo', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', `payment/${paymentId}`, null, headers);
+    });
+  }
 
   /**
    * 결제 로그 기록
-   * @param {Object} logData - 로그 데이터
-   * @returns {Promise} - API 응답
    */
-  const logPaymentAction = async (logData) => {
-    try {
-      return await req('POST', 'payment/logs', logData);
-    } catch (err) {
-      console.error('결제 로그 기록 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async logPaymentAction(logData) {
+    return this.safeExecute('logPaymentAction', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('POST', 'payment/logs', logData, headers);
+    });
+  }
 
   /**
    * 결제 로그 조회
-   * @returns {Promise} - 결제 로그 목록
    */
-  const getPaymentLogs = async () => {
-    try {
-      return await req('GET', 'payment/logs');
-    } catch (err) {
-      console.error('결제 로그 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getPaymentLogs() {
+    return this.safeExecute('getPaymentLogs', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('GET', 'payment/logs', null, headers);
+    });
+  }
 
   /**
    * 환불 요청
-   * @param {Object} refundData - 환불 데이터
-   * @returns {Promise} - API 응답
    */
-  const refundPayment = async (refundData) => {
-    try {
-      return await req('POST', 'payment/refund', refundData);
-    } catch (err) {
-      console.error('환불 요청 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async refundPayment(refundData) {
+    return this.safeExecute('refundPayment', async () => {
+      const headers = this.getAuthHeaders();
+      return await this.axiosInstance.req('POST', 'payment/refund', refundData, headers);
+    });
+  }
 
   /**
-   * 구독 플랜 목록 조회
-   * @returns {Promise} - 구독 플랜 목록
+   * 구독 플랜 목록 조회 (인증 불필요)
    */
-  const getSubscriptionPlans = async () => {
-    try {
-      return await req('GET', 'subscription/plans');
-    } catch (err) {
-      console.error('구독 플랜 목록 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getSubscriptionPlans() {
+    return this.safeExecute('getSubscriptionPlans', async () => {
+      return await this.axiosInstance.req('GET', 'subscription/plans/active');
+    });
+  }
 
   /**
-   * 구독 플랜 상세 조회
-   * @param {string} planName - 플랜 이름
-   * @returns {Promise} - 구독 플랜 상세 정보
+   * 구독 플랜 상세 조회 (인증 불필요)
    */
-  const getSubscriptionPlanByName = async (planName) => {
-    try {
-      return await req('GET', `subscription/plans/name/${planName}`);
-    } catch (err) {
-      console.error('구독 플랜 상세 조회 중 오류 발생:', err);
-      throw err;
-    }
-  };
+  async getSubscriptionPlanByName(planName) {
+    return this.safeExecute('getSubscriptionPlanByName', async () => {
+      return await this.axiosInstance.req('GET', `subscription/plans/name/${planName}`);
+    });
+  }
   
-  return {
-    getPortOneAccessToken,
-    verifyPaymentAndCreateSubscription,
-    getSubscriptionInfo,
-    getSubscriptionDetails,
-    cancelSubscription,
-    getPaymentReceipt,
-    registerPaymentMethod,
-    getPaymentMethods,
-    deletePaymentMethod,
-    updateAutoRenewal,
-    changePlan,
-    changePaymentMethod,
-    createSubscription,
-    createCancellation,
-    getCancellationHistory,
-    getCancellationDetail,
-    getPaymentInfo,
-    logPaymentAction,
-    getPaymentLogs,
-    refundPayment,
-    getSubscriptionPlans,
-    getSubscriptionPlanByName,
-    loading,
-    error
-  };
+  // 상태 확인 메서드들
+  get isInitialized() {
+    return this.initialized;
+  }
+  
+  get loading() {
+    return this.axiosInstance?.loading || false;
+  }
+  
+  get error() {
+    return this.axiosInstance?.error || null;
+  }
+}
+
+// 싱글톤 인스턴스 생성
+const paymentServiceInstance = new PaymentServiceClass();
+
+// PaymentService Provider 컴포넌트
+export const PaymentServiceProvider = ({ children }) => {
+  const [isReady, setIsReady] = useState(false);
+  const { req, loading, error } = UseAxios();
+  
+  useEffect(() => {
+    const initializeService = async () => {
+      try {
+        await paymentServiceInstance.initialize({ req, loading, error });
+        setIsReady(true);
+      } catch (err) {
+        console.error('PaymentService 초기화 실패:', err);
+      }
+    };
+    
+    initializeService();
+  }, [req, loading, error]);
+  
+  return (
+    <PaymentServiceContext.Provider value={{ 
+      paymentService: paymentServiceInstance, 
+      isReady 
+    }}>
+      {children}
+    </PaymentServiceContext.Provider>
+  );
+};
+
+// 안전한 PaymentService 훅
+export const usePaymentService = () => {
+  const context = useContext(PaymentServiceContext);
+  
+  if (!context) {
+    throw new Error('usePaymentService는 PaymentServiceProvider 내에서 사용해야 합니다.');
+  }
+  
+  return context;
+};
+
+// 하위 호환성을 위한 기존 방식 지원
+const PaymentService = () => {
+  const { req, loading, error } = UseAxios();
+  
+  // 자동 초기화
+  useEffect(() => {
+    const initializeService = async () => {
+      if (!paymentServiceInstance.isInitialized) {
+        await paymentServiceInstance.initialize({ req, loading, error });
+      }
+    };
+    
+    initializeService();
+  }, [req, loading, error]);
+  
+  return paymentServiceInstance;
 };
 
 export default PaymentService;

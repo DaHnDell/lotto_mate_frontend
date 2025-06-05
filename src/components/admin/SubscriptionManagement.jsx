@@ -72,7 +72,7 @@ const SubscriptionManagement = () => {
       // 오류 발생 시 빈 배열로 설정
       setPlans([]);
     }
-  }, [plansApi]);
+  }, []);
 
   const fetchSubscriptions = useCallback(async () => {
     try {
@@ -82,7 +82,7 @@ const SubscriptionManagement = () => {
       console.error('구독 정보 로딩 오류:', err);
       setSubscriptions([]);
     }
-  }, [subscriptionsApi]);
+  }, []);
 
   const fetchCancellations = useCallback(async () => {
     try {
@@ -92,7 +92,7 @@ const SubscriptionManagement = () => {
       console.error('취소 요청 로딩 오류:', err);
       setCancelRequests([]);
     }
-  }, [cancellationsApi]);
+  }, []);
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -121,8 +121,7 @@ const SubscriptionManagement = () => {
       
       if (response) {
         // 데이터 다시 불러오기
-        const plansData = await plansApi.req('GET', 'admin/subscription/plans/all');
-        setPlans(plansData || []);
+        await fetchPlans();
         setShowAddModal(false);
         
         // 폼 초기화
@@ -149,8 +148,9 @@ const SubscriptionManagement = () => {
       
       if (response) {
         // 데이터 다시 불러오기
-        const plansData = await plansApi.req('GET', 'admin/subscription/plans/all');
-        setPlans(plansData || []);
+        // const plansData = await plansApi.req('GET', 'admin/subscription/plans/all');
+        // setPlans(plansData || []);
+        await fetchPlans();
         setShowEditModal(false);
       }
     } catch (err) {
@@ -166,8 +166,9 @@ const SubscriptionManagement = () => {
       
       if (response) {
         // 데이터 다시 불러오기
-        const plansData = await plansApi.req('GET', 'admin/subscription/plans/all');
-        setPlans(plansData || []);
+        // const plansData = await plansApi.req('GET', 'admin/subscription/plans/all');
+        // setPlans(plansData || []);
+        await fetchPlans();
         setShowDeleteModal(false);
       }
     } catch (err) {
@@ -194,11 +195,11 @@ const SubscriptionManagement = () => {
       await plansApi.req('PUT', `admin/subscription/plans/toggle/${planId}`, updatedPlan);
       
       // API 응답 후 최신 데이터로 다시 업데이트
-      fetchPlans();
+      await fetchPlans();
     } catch (err) {
       console.error('플랜 상태 변경 오류:', err);
       // 오류 발생 시 원래 상태로 복원
-      fetchPlans();
+      await fetchPlans();
       alert('플랜 상태 변경 중 오류가 발생했습니다.');
     }
   };
@@ -221,8 +222,7 @@ const SubscriptionManagement = () => {
       
       if (response) {
         // 데이터 다시 불러오기
-        const cancelData = await cancellationsApi.req('GET', 'admin/subscription/cancellations');
-        setCancelRequests(cancelData || []);
+        await fetchCancellations();
       }
     } catch (err) {
       console.error('취소 요청 처리 오류:', err);
