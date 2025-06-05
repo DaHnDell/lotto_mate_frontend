@@ -116,7 +116,7 @@ const Premium = () => {
     } finally {
       setLoading(false);
     }
-  }, [plansApi]);
+  }, []);
 
   // 활성화된 구독 플랜 조회
   useEffect(() => {
@@ -167,11 +167,12 @@ const Premium = () => {
 
   // 구독하기 버튼 클릭 핸들러
   const handleSubscribe = async () => {
-    // 로컬 스토리지에서 직접 이메일 가져오기
+    // 로컬 스토리지에서 직접 이메일과 토큰 가져오기
     const email = localStorage.getItem("email");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     
-    // 로그인 체크 - 상태 변수(user)가 아닌 직접 로컬 스토리지 값 확인
-    if (!email) {
+    // 로그인 체크 - 이메일과 토큰 모두 확인
+    if (!email || !token) {
       alert('구독을 시작하려면 로그인이 필요합니다.');
       navigate('/login', { state: { from: '/premium' } });
       return;
@@ -184,10 +185,6 @@ const Premium = () => {
     
     try {
       setIsProcessingPayment(true);
-      
-      // 포트원 결제 요청 전 서버에서 직접 토큰 발급 (클라이언트에서는 발급하지 않음)
-      // 서버 측에서 결제 검증 시 토큰을 직접 생성하므로 여기서 토큰을 미리 발급할 필요가 없음
-      console.log("결제 과정 시작");
       
       const { IMP } = window;
       // 가맹점 식별코드 초기화
@@ -202,13 +199,22 @@ const Premium = () => {
       // 고유 주문번호 생성
       const merchantUid = `subscription_${Date.now()}_${Math.random().toString(36).substr(2, 11)}`;
       
+      console.log('결제 요청 시작:', {
+        selectedPlan,
+        billingPeriod,
+        price,
+        merchantUid,
+        email,
+        hasToken: !!token
+      });
+      
       // 결제 요청
       IMP.request_pay({
         pg: 'tosspayments', // PG사 (실제 계약한 PG사로 변경)
         pay_method: 'card', // 결제 수단
         merchant_uid: merchantUid, // 주문번호
         name: `로또메이트+ ${selectedPlanData.name} ${billingPeriod === 'monthly' ? '월간' : '연간'} 구독`, // 주문명
-        amount: price.toString(), // 문자열로 변환, // 결제금액
+        amount: price.toString(), // 문자열로 변환
         buyer_email: email || '', 
         buyer_name: '', 
         buyer_tel: '', 
@@ -222,66 +228,70 @@ const Premium = () => {
           }
         })
       }, async function(response) {
-        console.log("포트원 결제 응답:", response);
+        console.log('포트원 결제 응답:', response);
 
         if (response.imp_uid) {
           try {
-            // 결제 검증 및 구독 정보 저장 
+            // 결제 검증 및 구독 정보 저장
             const subscriptionInfo = {
               impUid: response.imp_uid,
               merchantUid: response.merchant_uid,
               plan: selectedPlan,
               period: billingPeriod,
               amount: price,
-              userEmail: email  // 사용자 이메일 추가
+              userEmail: email
             };
             
-            // 서버에 검증 요청 시 토큰 헤더를 추가하지 않음 (서버에서 직접 생성)
-            const headers = {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            };
+            console.log('결제 검증 요청 데이터:', subscriptionInfo);
             
-            console.log("서버로 결제 검증 요청 전송:", subscriptionInfo);
-            
-            await paymentService.verifyPaymentAndCreateSubscription(
+            // 싱글톤 PaymentService 사용
+            const result = await paymentService.verifyPaymentAndCreateSubscription(
               { impUid: response.imp_uid, merchantUid: response.merchant_uid },
-              subscriptionInfo,
-              headers
-            ).then(result => {
-              // 성공 처리
-              console.log("결제 검증 성공:", result);
-              navigate('/subscription/complete', { 
-                state: { 
-                  impUid: response.imp_uid,
-                  subscriptionId: result 
-                } 
-              });
-            }).catch(error => {
-              console.error('결제 검증 실패:', error);
-              alert('결제 검증에 실패했습니다. 고객센터에 문의해주세요.');
+              subscriptionInfo
+            );
+            
+            console.log('결제 검증 성공:', result);
+            
+            // 성공 처리
+            navigate('/subscription/complete', { 
+              state: { 
+                impUid: response.imp_uid,
+                subscriptionId: result.subscriptionId || result // result가 id일 수도 있음
+              } 
             });
           } catch (error) {
-            console.error('결제 처리 오류:', error);
-            alert('결제 처리 중 오류가 발생했습니다.');
-          } finally {
-            setIsProcessingPayment(false);
+            console.error('결제 검증 실패:', error);
+            
+            // 에러 메시지 개선
+            let errorMessage = '결제 검증에 실패했습니다.';
+            
+            if (error.message.includes('로그인')) {
+              errorMessage = '로그인이 만료되었습니다. 다시 로그인 후 시도해주세요.';
+              // 로그인 페이지로 리다이렉트
+              navigate('/login', { state: { from: '/premium' } });
+              return;
+            } else if (error.message.includes('인증')) {
+              errorMessage = '사용자 인증에 실패했습니다. 다시 로그인해주세요.';
+              navigate('/login', { state: { from: '/premium' } });
+              return;
+            }
+            
+            alert(`${errorMessage} 고객센터에 문의해주세요.`);
           }
         } else if (response.success === false) {
           // 명시적인 실패 케이스
           console.error('결제 실패:', response.error_msg);
           alert(`결제 실패: ${response.error_msg}`);
-          setIsProcessingPayment(false);
         } else {
           // imp_uid가 없으면 결제 요청 자체가 실패한 것
-          // success 필드가 없는 경우 (비정상 케이스)
           console.error('결제 응답 형식 오류:', response);
           alert('결제 처리 중 오류가 발생했습니다.');
-          setIsProcessingPayment(false);
         }
       });
     } catch (error) {
       console.error('결제 프로세스 오류:', error);
       alert('결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
       setIsProcessingPayment(false);
     }
   };
